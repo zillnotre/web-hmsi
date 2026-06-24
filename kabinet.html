@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Kabinet - HMSI UNIPEM</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.kabinet-hero {
+  background: linear-gradient(135deg, rgba(91,140,255,0.12), rgba(167,139,250,0.08));
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  padding: 3rem;
+  text-align: center;
+  margin-bottom: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.kabinet-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.kabinet-logo{
+  margin-bottom:1rem;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.kabinet-logo img{
+  width:320px;
+  max-width:100%;
+  height:auto;
+  display:block;
+  filter: drop-shadow(0 8px 24px rgba(91,140,255,.25));
+}
+
+.kabinet-hero > * { position: relative; z-index: 1; }
+.kabinet-logo { font-size: 4rem; margin-bottom: 1rem; }
+.kabinet-name {
+  font-family: var(--ff-head);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+.kabinet-tagline {
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+}
+.kabinet-periode {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(91,140,255,0.12);
+  border: 1px solid var(--border-accent);
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ===== LEADER SECTION ===== */
+
+.leader-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+.leader-card {
+  background: linear-gradient(
+    135deg,
+    rgba(91,140,255,0.10),
+    rgba(167,139,250,0.05)
+  );
+
+  border: 1px solid var(--border-accent);
+
+  border-radius: var(--radius-lg);
+
+  overflow: hidden;
+
+  transition: all 0.35s ease;
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 700px;
+
+  position: relative;
+}
+
+.leader-card:hover {
+  transform: translateY(-8px);
+
+  box-shadow:
+    0 24px 60px rgba(91,140,255,0.20);
+}
+
+/* FOTO */
+/* FOTO CONTAINER */
+.leader-photo {
+
+  height: 430px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(91,140,255,0.15),
+      rgba(167,139,250,0.10)
+    );
+}
+
+/* FOTO */
+.leader-photo img {
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  display: block;
+
+  transition: transform 0.4s ease;
+}
+
+/* HOVER */
+.leader-card:hover .leader-photo img {
+
+  transform: scale(1.02);
+}
+
+/* OVERLAY */
+.leader-photo::after {
+
+  content: '';
+
+  position: absolute;
+
+  inset: 0;
+
+  background: linear-gradient(
+    to top,
+    rgba(6,3,94,0.55),
+    transparent 55%
+  );
+
+  pointer-events: none;
+}
+
+/* INFO */
+.leader-info {
+
+  padding: 2rem;
+
+  text-align: center;
+
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex: 1;
+}
+
+/* BADGE */
+.leader-badge {
+
+  display: inline-block;
+
+  background: rgba(91,140,255,0.15);
+
+  border: 1px solid var(--border-accent);
+
+  padding: 0.35rem 1rem;
+
+  border-radius: 50px;
+
+  font-size: 0.72rem;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+
+  color: var(--accent);
+
+  margin-bottom: 1rem;
+}
+
+/* NAMA */
+.leader-name {
+
+  font-family: var(--ff-head);
+
+  font-size: 2rem;
+
+  font-weight: 800;
+
+  line-height: 1.1;
+
+  margin-bottom: 0.5rem;
+
+  color: var(--text-primary);
+}
+
+/* NIM */
+.leader-nim {
+
+  font-size: 0.9rem;
+
+  color: var(--text-muted);
+
+  margin-bottom: 1.5rem;
+}
+
+/* QUOTE */
+.leader-quote {
+
+  font-size: 0.95rem;
+
+  color: var(--text-secondary);
+
+  font-style: italic;
+
+  line-height: 1.8;
+
+  padding: 1.2rem;
+
+  background: rgba(255,255,255,0.04);
+
+  border-radius: 14px;
+
+  border-left: 3px solid var(--accent);
+
+  width: 100%;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 900px) {
+
+  .leader-grid {
+
+    grid-template-columns: 1fr;
+
+    max-width: 500px;
+
+    margin: 0 auto 3rem;
+  }
+
+  .leader-card {
+
+    min-height: auto;
+  }
+
+  .leader-photo {
+
+    height: 380px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .leader-photo {
+
+    height: 320px;
+  }
+
+  .leader-name {
+
+    font-size: 1.6rem;
+  }
+
+  .leader-info {
+
+    padding: 1.5rem;
+  }
+
+  .leader-quote {
+
+    font-size: 0.88rem;
+  }
+}
+
+.dept-section {
+  margin-bottom: 3.5rem;
+}
+.dept-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.dept-icon {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  background: rgba(91,140,255,0.1);
+  border: 1px solid var(--border-accent);
+  flex-shrink: 0;
+}
+.dept-header h3 {
+  font-family: var(--ff-head);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.dept-header span {
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+.member-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+}
+.member-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-align: center;
+  transition: all 0.3s;
+}
+.member-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-4px);
+}
+.member-ava {
+  height: 130px;
+  background: linear-gradient(135deg, rgba(91,140,255,0.15), rgba(167,139,250,0.1));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3.5rem;
+}
+.member-body { padding: 1rem; }
+.member-body .name {
+  font-family: var(--ff-head);
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.member-body .role {
+  font-size: 0.72rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+.member-body .nim {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.struktur-bagan {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-bottom: 4rem;
+  overflow-x: auto;   /* scroll horizontal kalau terlalu sempit */
+}
+
+/* Wrapper yang di-scroll jika perlu */
+.bagan-scroll {
+  min-width: 320px;
+  display: inline-block; /* shrink-wrap isinya */
+  width: 100%;
+}
+
+.bagan-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: relative;
+}
+.bagan-box {
+  background: rgba(91,140,255,0.1);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius);
+  padding: 0.8rem 1.2rem;
+  min-width: 120px;
+  max-width: 160px;
+  transition: all 0.2s;
+  word-break: break-word;
+}
+.bagan-box:hover { background: rgba(91,140,255,0.2); transform: scale(1.02); }
+.bagan-box .btitle { font-family: var(--ff-head); font-size: 0.85rem; font-weight: 700; }
+.bagan-box .bsub { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.2rem; line-height: 1.4; }
+.bagan-arrow {
+  width: 1px; height: 30px;
+  background: var(--border-accent);
+  margin: 0 auto;
+}
+
+/* Baris divisi — desktop: 1 baris horizontal */
+.bagan-line {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0;
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  flex-wrap: nowrap;  /* desktop: tetap 1 baris */
+}
+/* Garis horizontal di atas semua divisi */
+.bagan-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: calc(8.33% + 0.5rem);  /* sejajar kolom pertama */
+  right: calc(8.33% + 0.5rem);
+  height: 1px;
+  background: var(--border-accent);
+}
+.bagan-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0.4rem;
+  flex: 1;
+  min-width: 0;
+}
+.bagan-col-line {
+  width: 1px;
+  height: 20px;
+  background: var(--border-accent);
+  flex-shrink: 0;
+}
+
+/* ===== RESPONSIVE BAGAN ===== */
+
+/* Tablet: 2 baris × 3 kotak */
+@media (max-width: 700px) {
+  .struktur-bagan {
+    padding: 2rem 1rem;
+    overflow-x: visible;
+  }
+
+  .bagan-line {
+    flex-wrap: wrap;         /* izinkan wrap */
+    gap: 0.6rem;
+    justify-content: center;
+    padding-top: 0;          /* hapus garis horizontal pseudo */
+  }
+  .bagan-line::before {
+    display: none;           /* sembunyikan garis horizontal */
+  }
+
+  .bagan-col {
+    flex: 0 0 calc(33.33% - 0.6rem);  /* 3 kolom */
+    padding: 0;
+  }
+  .bagan-col-line {
+    display: none;           /* garis vertikal tidak diperlukan di wrap mode */
+  }
+
+  .bagan-box {
+    max-width: 100%;
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+/* Mobile kecil: 2 kolom */
+@media (max-width: 480px) {
+  .bagan-col {
+    flex: 0 0 calc(50% - 0.4rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .leader-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto 3.5rem; }
+  .member-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .member-grid { grid-template-columns: repeat(2, 1fr); }
+  .kabinet-hero { padding: 2rem 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+   <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+
+  <div class="brand-icon">
+    <img src="img/hmsi.png" alt="Logo HMSI">
+  </div>
+
+  <span class="brand-text">
+    <strong>HMSI</strong><br>
+    UNIPEM
+  </span>
+
+  <div class="brand-icon">
+      <img src="img/karsa.png" alt="Logo kabinet">
+    </div>
+
+</div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link active">Beranda</a>
+      <a href="tentang.html" class="nav-link">Tentang HMSI</a>
+      <a href="gallery.html" class="nav-link">Gallery</a>
+      <a href="event.html" class="nav-link">Event Info</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link dropdown-toggle">Divisi Kami <span>▾</span></a>
+        <div class="dropdown-menu">
+          <a href="divisi.html#lisdm">LisDM</a>
+          <a href="divisi.html#kominfo">Kominfo</a>
+          <a href="divisi.html#kesekretariatan">Kesekretariatan</a>
+          <a href="divisi.html#humas">Humas</a>
+          <a href="divisi.html#sekbend">Sekbend</a>
+        </div>
+      </div>
+      <a href="proker.html" class="nav-link">Program Kerja</a>
+      <a href="kabinet.html" class="nav-link">Profil Kabinet</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-header-content">
+      <div class="breadcrumb"><a href="index.html">Beranda</a> <span>/</span> Profil Kabinet</div>
+      <div class="section-tag">Kepengurusan 2025–2026</div>
+      <h1>Profil <span class="accent">Kabinet</span></h1>
+      <p>Mengenal lebih dekat para pengurus HMSI UNIPEM periode 2024–2025 yang berdedikasi.</p>
+    </div>
+  </div>
+
+  <section class="section" style="background: var(--bg-dark);">
+    <div class="container">
+
+      <!-- KABINET IDENTITY -->
+      <div class="kabinet-hero fade-up">
+        <div class="kabinet-logo">
+  <img src="img/karsa.png" alt="Logo Kabinet Karsa Syandana">
+</div>
+        <div class="kabinet-name">Kabinet <span class="accent">Karsa Syandana</span></div>
+        <div class="kabinet-tagline">"Bersatu dalam Keberagaman, Berinovasi untuk Kemajuan"</div>
+        <div class="kabinet-periode">📅 Periode 2025 – 2026</div>
+      </div>
+
+      <!-- PIMPINAN -->
+     <!-- PIMPINAN -->
+
+
+<!-- PEMBINA HMSI -->
+<div class="pembina-wrapper fade-up">
+
+  <div class="section-tag pembina-tag">
+    Pembina HMSI
+  </div>
+
+  <div class="pembina-card">
+
+    <div class="pembina-photo">
+      <img src="img/nurasiah.png" alt="Pembina HMSI">
+    </div>
+
+    <div class="pembina-info">
+
+      <span class="pembina-badge">
+        ✦ Pembina HMSI
+      </span>
+
+      <h3>Nurasiah, S.KOM., MMSI.</h3>
+
+      <p class="pembina-jabatan">
+        Ketua Program Studi Sistem Informasi
+      </p>
+
+      <div class="pembina-divider"></div>
+
+      <p class="pembina-quote">
+        "Mendorong lahirnya mahasiswa Sistem Informasi
+        yang unggul, inovatif, berintegritas, serta mampu
+        memberikan kontribusi nyata bagi masyarakat dan
+        perkembangan teknologi."
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- KETUA & WAKIL -->
+ <div class="section-tag fade-up">Pimpinan Utama</div>
+<div class="leader-grid fade-up">
+
+  <!-- KETUA -->
+  <div class="leader-card">
+
+    <div class="leader-photo">
+      <img src="img/mamed.jpeg" alt="Ketua Umum">
+    </div>
+
+    <div class="leader-info">
+
+      <div class="leader-badge">
+        Ketua Umum
+      </div>
+
+      <div class="leader-name">
+        Rahmad Firmansyah
+      </div>
+
+      <div class="leader-nim">
+        NIM: 2021110001 · Angkatan 2021
+      </div>
+
+      <div class="leader-quote">
+        "Bersama kita membangun HMSI yang lebih solid,
+        inovatif, dan bermanfaat bagi seluruh mahasiswa
+        Sistem Informasi."
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- WAKIL -->
+  <div class="leader-card">
+
+    <div class="leader-photo">
+      <img src="img/oliv.jpg" alt="Wakil Ketua Umum">
+    </div>
+
+    <div class="leader-info">
+
+      <div class="leader-badge">
+        Wakil Ketua Umum
+      </div>
+
+      <div class="leader-name">
+        Olivia Meilia
+      </div>
+
+      <div class="leader-nim">
+        NIM: 2021110015 · Angkatan 2021
+      </div>
+
+      <div class="leader-quote">
+        "Saya berkomitmen untuk mendukung seluruh
+        kegiatan dan memastikan setiap program kerja
+        berjalan optimal dan bermakna."
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+      <div class="section-tag fade-up">Bagan Organisasi</div>
+      <div class="struktur-bagan fade-up">
+        <div class="bagan-scroll">
+        <div class="bagan-row" style="margin-bottom:0;">
+          <div class="bagan-box" style="background:rgba(91,140,255,0.2);border-color:var(--accent);">
+            <div class="btitle">Ketua Umum</div>
+            <div class="bsub">Rahmad Firmansyah.</div>
+          </div>
+        </div>
+        <div class="bagan-arrow"></div>
+        <div class="bagan-row" style="margin-bottom:0;">
+          <div class="bagan-box">
+            <div class="btitle">Wakil Ketua</div>
+            <div class="bsub">Olivia Meilia</div>
+          </div>
+        </div>
+        <div class="bagan-arrow"></div>
+        <div class="bagan-line">
+          <div class="bagan-col"><div class="bagan-col-line"></div><div class="bagan-box"><div class="btitle">LisDM</div><div class="bsub">Muhammad Naufal Nazil</div></div></div>
+          <div class="bagan-col"><div class="bagan-col-line"></div><div class="bagan-box"><div class="btitle">Kominfo</div><div class="bsub">Septian Riziq</div></div></div>
+          <div class="bagan-col"><div class="bagan-col-line"></div><div class="bagan-box"><div class="btitle">Kesekretariatan</div><div class="bsub">Serlyn</div></div></div>
+          <div class="bagan-col"><div class="bagan-col-line"></div><div class="bagan-box"><div class="btitle">Humas</div><div class="bsub">Pramana Putra</div></div></div>
+          <div class="bagan-col"><div class="bagan-col-line"></div><div class="bagan-box"><div class="btitle">Bendahara</div><div class="bsub">Chantika</div></div></div>
+          <div class="bagan-col"><div class="bagan-col-line"></div><div class="bagan-box"><div class="btitle">Sekretaris</div><div class="bsub">Alya</div></div></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- DIVISI LISDM -->
+      <!-- <div class="dept-section fade-up">
+        <div class="dept-header">
+          <div class="dept-icon">👥</div>
+          <div><h3>Divisi LisDM</h3><span>Litbang & Sumber Daya Manusia</span></div>
+        </div>
+        <div class="member-grid">
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Muhammad Naufal</div><div class="role">Kepala Divisi</div><div class="nim">2022110001</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Siti Fatimah</div><div class="role">Anggota</div><div class="nim">2022110012</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Yasril Pajri</div><div class="role">Anggota</div><div class="nim">2022110025</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Sulthan Rafi</div><div class="role">Anggota</div><div class="nim">2023110008</div></div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- DIVISI KOMINFO -->
+      <!-- <div class="dept-section fade-up">
+        <div class="dept-header">
+          <div class="dept-icon" style="background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.3);">📡</div>
+          <div><h3>Divisi Kominfo</h3><span style="color:var(--accent2);">Komunikasi & Informasi</span></div>
+        </div>
+        <div class="member-grid">
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Fajar Ramadhan</div><div class="role">Kepala Divisi</div><div class="nim">2022110033</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Anisa Putri L.</div><div class="role">Wakil Kepala</div><div class="nim">2022110041</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Rio Firmansyah</div><div class="role">Desainer Grafis</div><div class="nim">2022110055</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Mega Silviana</div><div class="role">Content Creator</div><div class="nim">2023110016</div></div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- DIVISI KESEKRETARIATAN -->
+      <!-- <div class="dept-section fade-up">
+        <div class="dept-header">
+          <div class="dept-icon" style="background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.3);">📋</div>
+          <div><h3>Divisi Kesekretariatan</h3><span style="color:#34d399;">Administrasi & Dokumentasi</span></div>
+        </div>
+        <div class="member-grid">
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Rina Agustina</div><div class="role">Kepala Divisi</div><div class="nim">2022110062</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Yusuf Habibie</div><div class="role">Wakil Kepala</div><div class="nim">2022110074</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Putri Handayani</div><div class="role">Anggota</div><div class="nim">2023110027</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Dani Maulana</div><div class="role">Anggota</div><div class="nim">2023110035</div></div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- DIVISI HUMAS -->
+      <!-- <div class="dept-section fade-up">
+        <div class="dept-header">
+          <div class="dept-icon" style="background:rgba(251,191,36,0.1);border-color:rgba(251,191,36,0.3);">🤝</div>
+          <div><h3>Divisi Humas</h3><span style="color:#fbbf24;">Hubungan Masyarakat</span></div>
+        </div>
+        <div class="member-grid">
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Kevin Prasetyo</div><div class="role">Kepala Divisi</div><div class="nim">2022110088</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Laila Fitria</div><div class="role">Wakil Kepala</div><div class="nim">2022110096</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Bagas Nugroho</div><div class="role">Anggota</div><div class="nim">2023110042</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Nadia Amelia</div><div class="role">Anggota</div><div class="nim">2023110050</div></div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- DIVISI SEKBEND -->
+      <!-- <div class="dept-section fade-up">
+        <div class="dept-header">
+          <div class="dept-icon" style="background:rgba(249,115,22,0.1);border-color:rgba(249,115,22,0.3);">💼</div>
+          <div><h3>Divisi Sekbend</h3><span style="color:#f97316;">Sekretaris & Bendahara</span></div>
+        </div>
+        <div class="member-grid">
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Hendra Wijaya</div><div class="role">Kepala Divisi</div><div class="nim">2022110103</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Mita Anggraeni</div><div class="role">Wakil Kepala</div><div class="nim">2022110111</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Aldi Setiawan</div><div class="role">Anggota</div><div class="nim">2023110058</div></div>
+          </div>
+          <div class="member-card">
+            <div class="member-ava">👤</div>
+            <div class="member-body"><div class="name">Rini Puspita</div><div class="role">Anggota</div><div class="nim">2023110066</div></div>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+         <div class="footer-brand">
+  <img src="img/hmsi.png" alt="Logo HMSI" class="footer-logo">
+
+  <span><strong>HMSI</strong> UNIPEM</span>
+
+  <p>
+    Himpunan Mahasiswa Sistem Informasi
+    Universitas Pembangunan Indonesia
+  </p>
+</div>
+        <div class="footer-links"><h4>Navigasi</h4><a href="index.html">Beranda</a><a href="tentang.html">Tentang HMSI</a><a href="gallery.html">Gallery</a><a href="event.html">Event Info</a></div>
+        <div class="footer-links"><h4>Divisi</h4><a href="divisi.html#lisdm">LisDM</a><a href="divisi.html#kominfo">Kominfo</a><a href="divisi.html#humas">Humas</a><a href="divisi.html#sekbend">Sekbend</a></div>
+        <div class="footer-links"><h4>Lainnya</h4><a href="proker.html">Program Kerja</a><a href="kabinet.html">Profil Kabinet</a><a href="contact.html">Contact</a></div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 HMSI UNIPEM. All rights reserved.</p></div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

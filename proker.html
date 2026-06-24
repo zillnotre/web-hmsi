@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Program Kerja - HMSI UNIPEM</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.progress-bar-wrap {
+  background: rgba(255,255,255,0.07);
+  border-radius: 50px;
+  height: 6px;
+  margin-top: 0.8rem;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 50px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 1s ease;
+}
+.proker-filter {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+.proker-filter-btn {
+  padding: 0.4rem 1.1rem;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: var(--ff-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.proker-filter-btn:hover, .proker-filter-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.proker-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+.proker-card-full {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.proker-card-full::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.proker-card-full:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+  transform: translateY(-3px);
+}
+.proker-card-full:hover::before { opacity: 1; }
+.proker-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+.proker-emoji { font-size: 2rem; }
+.proker-status {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.7rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.status-done { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+.status-ongoing { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.status-planned { background: rgba(91,140,255,0.12); color: var(--accent); border: 1px solid var(--border-accent); }
+.proker-card-full h4 {
+  font-family: var(--ff-head);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+.proker-card-full p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+.proker-footer {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+.proker-footer span { display: flex; align-items: center; gap: 0.3rem; }
+
+.timeline-wrap {
+  position: relative;
+  padding-left: 2.5rem;
+}
+.timeline-wrap::before {
+  content: '';
+  position: absolute;
+  left: 10px; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.5rem;
+  transition: all 0.3s;
+}
+.timeline-item:hover { border-color: var(--border-accent); }
+.timeline-dot {
+  position: absolute;
+  left: -2rem;
+  top: 1.3rem;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-dark);
+  margin-left: -4px;
+}
+.timeline-dot.done { background: #34d399; }
+.timeline-dot.ongoing { background: #fbbf24; }
+.timeline-dot.planned { background: var(--accent); }
+.timeline-month {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+.timeline-item h4 {
+  font-family: var(--ff-head);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.timeline-item p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.summary-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 3.5rem;
+}
+.summary-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.3rem;
+  text-align: center;
+}
+.summary-item .snum {
+  font-family: var(--ff-head);
+  font-size: 2rem;
+  font-weight: 800;
+  display: block;
+}
+.summary-item .slbl {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 768px) {
+  .proker-grid { grid-template-columns: 1fr; }
+  .summary-bar { grid-template-columns: repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+   <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+
+  <div class="brand-icon">
+    <img src="img/hmsi.png" alt="Logo HMSI">
+  </div>
+
+  <span class="brand-text">
+    <strong>HMSI</strong><br>
+    UNIPEM
+  </span>
+  <div class="brand-icon">
+      <img src="img/karsa.png" alt="Logo kabinet">
+    </div>
+
+</div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link active">Beranda</a>
+      <a href="tentang.html" class="nav-link">Tentang HMSI</a>
+      <a href="gallery.html" class="nav-link">Gallery</a>
+      <a href="event.html" class="nav-link">Event Info</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link dropdown-toggle">Divisi Kami <span>▾</span></a>
+        <div class="dropdown-menu">
+          <a href="divisi.html#lisdm">LisDM</a>
+          <a href="divisi.html#kominfo">Kominfo</a>
+          <a href="divisi.html#kesekretariatan">Kesekretariatan</a>
+          <a href="divisi.html#humas">Humas</a>
+          <a href="divisi.html#sekbend">Sekbend</a>
+        </div>
+      </div>
+      <a href="proker.html" class="nav-link">Program Kerja</a>
+      <a href="kabinet.html" class="nav-link">Profil Kabinet</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-header-content">
+      <div class="breadcrumb"><a href="index.html">Beranda</a> <span>/</span> Program Kerja</div>
+      <div class="section-tag">Rencana Kegiatan</div>
+      <h1>Program <span class="accent">Kerja</span></h1>
+      <p>Daftar lengkap program kerja HMSI UNIPEM periode 2024–2025.</p>
+    </div>
+  </div>
+
+  <section class="section" style="background: var(--bg-dark);">
+    <div class="container">
+
+      <!-- SUMMARY -->
+      <div class="summary-bar fade-up">
+        <div class="summary-item">
+          <span class="snum" style="color:#34d399;">8</span>
+          <div class="slbl">✅ Selesai</div>
+        </div>
+        <div class="summary-item">
+          <span class="snum" style="color:#fbbf24;">4</span>
+          <div class="slbl">🔄 Berjalan</div>
+        </div>
+        <div class="summary-item">
+          <span class="snum" style="color:var(--accent);">10</span>
+          <div class="slbl">📅 Direncanakan</div>
+        </div>
+        <div class="summary-item">
+          <span class="snum">22</span>
+          <div class="slbl">📋 Total ProKer</div>
+        </div>
+      </div>
+
+      <!-- FILTER -->
+      <div class="proker-filter fade-up">
+        <button class="proker-filter-btn active" onclick="filterProker('all',this)">Semua</button>
+        <button class="proker-filter-btn" onclick="filterProker('lisdm',this)">LisDM</button>
+        <button class="proker-filter-btn" onclick="filterProker('kominfo',this)">Kominfo</button>
+        <button class="proker-filter-btn" onclick="filterProker('kesekretariatan',this)">Kesekretariatan</button>
+        <button class="proker-filter-btn" onclick="filterProker('humas',this)">Humas</button>
+        <button class="proker-filter-btn" onclick="filterProker('sekbend',this)">Sekbend</button>
+      </div>
+
+      <!-- PROKER GRID -->
+      <div class="proker-grid fade-up" id="prokerGrid">
+
+        <div class="proker-card-full" data-div="lisdm">
+          <div class="proker-top">
+            <div class="proker-emoji">🎯</div>
+            <span class="proker-status status-done">Mendatang</span>
+          </div>
+          <h4>Rekrutmen Anggota Baru 2026</h4>
+          <p>Program penerimaan anggota baru HMSI dengan rangkaian seleksi yang terstruktur dan transparan.</p>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>👥 LisDM</span><span>📅 Oktober 2026</span><span>👤 Terbatas</span>
+          </div>
+        </div>
+
+        <!-- <div class="proker-card-full" data-div="lisdm">
+          <div class="proker-top">
+            <div class="proker-emoji">📚</div>
+            <span class="proker-status status-ongoing">Berjalan</span>
+          </div>
+          <h4>Program Mentoring Akademik</h4>
+          <p>Pendampingan akademik oleh senior kepada mahasiswa baru agar dapat beradaptasi dengan lingkungan kampus.</p>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:65%"></div></div>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>👥 LisDM</span><span>📅 Mar–Des 2024</span><span>👤 30 Peserta</span>
+          </div>
+        </div>
+
+        <div class="proker-card-full" data-div="kominfo">
+          <div class="proker-top">
+            <div class="proker-emoji">📱</div>
+            <span class="proker-status status-done">Selesai</span>
+          </div>
+          <h4>Revamp Media Sosial HMSI</h4>
+          <p>Pembaruan seluruh platform media sosial dengan identitas visual baru yang modern dan konsisten.</p>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>📡 Kominfo</span><span>📅 Jan 2024</span><span>🔗 IG, Twitter, TikTok</span>
+          </div>
+        </div>
+
+        <div class="proker-card-full" data-div="kominfo">
+          <div class="proker-top">
+            <div class="proker-emoji">🌐</div>
+            <span class="proker-status status-ongoing">Berjalan</span>
+          </div>
+          <h4>Pengelolaan Website Resmi</h4>
+          <p>Pembaruan konten dan fitur website resmi HMSI agar selalu informatif dan relevan bagi anggota.</p>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:80%"></div></div>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>📡 Kominfo</span><span>📅 Jan–Des 2024</span><span>🌐 Website</span>
+          </div>
+        </div>
+
+        <div class="proker-card-full" data-div="humas">
+          <div class="proker-top">
+            <div class="proker-emoji">🤝</div>
+            <span class="proker-status status-done">Selesai</span>
+          </div>
+          <h4>Kunjungan Industri 2024</h4>
+          <p>Kunjungan ke perusahaan teknologi terkemuka untuk memperluas wawasan dan membangun jaringan mahasiswa.</p>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>🤝 Humas</span><span>📅 Apr 2024</span><span>👤 40 Peserta</span>
+          </div>
+        </div>
+
+        <div class="proker-card-full" data-div="humas">
+          <div class="proker-top">
+            <div class="proker-emoji">🌱</div>
+            <span class="proker-status status-planned">Direncanakan</span>
+          </div>
+          <h4>Bakti Sosial & Pengabdian Masyarakat</h4>
+          <p>Kegiatan sosial ke masyarakat sekitar kampus sebagai bentuk kontribusi nyata mahasiswa teknologi.</p>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:20%"></div></div>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>🤝 Humas</span><span>📅 Agt 2024</span><span>👤 Seluruh Anggota</span>
+          </div>
+        </div>
+
+        <div class="proker-card-full" data-div="kesekretariatan">
+          <div class="proker-top">
+            <div class="proker-emoji">📂</div>
+            <span class="proker-status status-done">Selesai</span>
+          </div>
+          <h4>Digitalisasi Arsip Organisasi</h4>
+          <p>Pemindahan seluruh arsip fisik ke sistem digital berbasis cloud untuk kemudahan akses dan pengelolaan.</p>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>📋 Kesekretariatan</span><span>📅 Feb 2024</span><span>☁️ Google Drive</span>
+          </div>
+        </div>
+
+        <div class="proker-card-full" data-div="sekbend">
+          <div class="proker-top">
+            <div class="proker-emoji">💰</div>
+            <span class="proker-status status-ongoing">Berjalan</span>
+          </div>
+          <h4>Pengelolaan Iuran & Dana Kas</h4>
+          <p>Sistem pengelolaan iuran anggota dan dana kas yang transparan dengan laporan bulanan yang dapat diakses semua anggota.</p>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:70%"></div></div>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>💼 Sekbend</span><span>📅 Jan–Des 2024</span><span>📊 Laporan Bulanan</span>
+          </div>
+        </div>
+
+        <div class="proker-card-full" data-div="lisdm">
+          <div class="proker-top">
+            <div class="proker-emoji">⚡</div>
+            <span class="proker-status status-planned">Direncanakan</span>
+          </div>
+          <h4>Hackathon HMSI 2025</h4>
+          <p>Kompetisi pemrograman 24 jam dengan hadiah total jutaan rupiah untuk tim terbaik dari seluruh kampus.</p>
+          <div class="progress-bar-fill" style="width:30%"></div>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>👥 LisDM</span><span>📅 Jul 2025</span><span>🏆 Rp 5 Juta</span>
+          </div>
+        </div>
+
+        <div class="proker-card-full" data-div="kominfo">
+          <div class="proker-top">
+            <div class="proker-emoji">🎨</div>
+            <span class="proker-status status-planned">Direncanakan</span>
+          </div>
+          <h4>Lomba Desain Grafis Mahasiswa</h4>
+          <p>Kompetisi desain grafis bertema teknologi yang terbuka untuk seluruh mahasiswa tingkat nasional.</p>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>📡 Kominfo</span><span>📅 Sep 2024</span><span>🏆 Hadiah Menarik</span>
+          </div>
+        </div>
+
+        <div class="proker-card-full" data-div="humas">
+          <div class="proker-top">
+            <div class="proker-emoji">🎓</div>
+            <span class="proker-status status-planned">Direncanakan</span>
+          </div>
+          <h4>Seminar Karir & Career Fair</h4>
+          <p>Kegiatan pembekalan karir dan pameran lowongan kerja yang menghubungkan mahasiswa dengan perusahaan teknologi.</p>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>🤝 Humas</span><span>📅 Okt 2024</span><span>🏢 10+ Perusahaan</span>
+          </div>
+        </div>
+
+        <div class="proker-card-full" data-div="sekbend">
+          <div class="proker-top">
+            <div class="proker-emoji">📊</div>
+            <span class="proker-status status-planned">Direncanakan</span>
+          </div>
+          <h4>Laporan Keuangan Tahunan</h4>
+          <p>Penyusunan dan presentasi laporan keuangan tahunan secara transparan kepada seluruh anggota HMSI.</p>
+          <div class="proker-footer" style="margin-top:0.8rem;">
+            <span>💼 Sekbend</span><span>📅 Des 2024</span><span>📋 Laporan Akhir Tahun</span>
+          </div>
+        </div> -->
+
+      </div>
+
+      <!-- TIMELINE -->
+      <div style="margin-top:4rem;">
+        <div class="section-tag fade-up">Jadwal Kegiatan</div>
+        <h2 class="section-title fade-up">Timeline <span class="accent">2024–2025</span></h2>
+        <div class="timeline-wrap fade-up" style="margin-top:2rem;">
+          <div class="timeline-item">
+            <div class="timeline-dot done"></div>
+            <div class="timeline-month">Januari 2024</div>
+            <h4>Revamp Media Sosial & Rapat Perdana Pengurus</h4>
+            <p>Kick-off kepengurusan baru dengan pembaruan identitas digital HMSI.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot done"></div>
+            <div class="timeline-month">Februari 2024</div>
+            <h4>Rekrutmen Anggota Baru & Digitalisasi Arsip</h4>
+            <p>Penerimaan anggota baru dan modernisasi sistem pengarsipan organisasi.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot done"></div>
+            <div class="timeline-month">Maret 2024</div>
+            <h4>Workshop Data Science & Program Mentoring</h4>
+            <p>Pelatihan teknis dan peluncuran program pendampingan akademik anggota baru.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot done"></div>
+            <div class="timeline-month">April 2024</div>
+            <h4>Kunjungan Industri & Seminar Cybersecurity</h4>
+            <p>Dua kegiatan besar untuk memperluas wawasan anggota tentang dunia industri dan keamanan digital.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot ongoing"></div>
+            <div class="timeline-month">Juni 2025</div>
+            <h4>Workshop UI/UX Design & Seminar Nasional</h4>
+            <p>Dua event unggulan semester genap yang dinantikan oleh seluruh anggota HMSI.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot planned"></div>
+            <div class="timeline-month">Juli 2025</div>
+            <h4>Hackathon HMSI 2025</h4>
+            <p>Kompetisi pemrograman akbar yang menjadi event terbesar tahun ini.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot planned"></div>
+            <div class="timeline-month">Desember 2025</div>
+            <h4>Laporan Tahunan & Persiapan Regenerasi</h4>
+            <p>Evaluasi akhir tahun dan persiapan transisi kepengurusan periode berikutnya.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+         <div class="footer-brand">
+  <img src="img/hmsi.png" alt="Logo HMSI" class="footer-logo">
+
+  <span><strong>HMSI</strong> UNIPEM</span>
+
+  <p>
+    Himpunan Mahasiswa Sistem Informasi
+    Universitas Pembangunan Indonesia
+  </p>
+</div>
+        <div class="footer-links"><h4>Navigasi</h4><a href="index.html">Beranda</a><a href="tentang.html">Tentang HMSI</a><a href="gallery.html">Gallery</a><a href="event.html">Event Info</a></div>
+        <div class="footer-links"><h4>Divisi</h4><a href="divisi.html#lisdm">LisDM</a><a href="divisi.html#kominfo">Kominfo</a><a href="divisi.html#humas">Humas</a><a href="divisi.html#sekbend">Sekbend</a></div>
+        <div class="footer-links"><h4>Lainnya</h4><a href="proker.html">Program Kerja</a><a href="kabinet.html">Profil Kabinet</a><a href="contact.html">Contact</a></div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 HMSI UNIPEM. All rights reserved.</p></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    function filterProker(div, btn) {
+      document.querySelectorAll('.proker-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.proker-card-full').forEach(card => {
+        card.style.display = (div === 'all' || card.dataset.div === div) ? 'block' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

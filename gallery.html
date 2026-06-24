@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery - HMSI UNIPEM</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.filter-bar {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+.filter-btn {
+  padding: 0.45rem 1.2rem;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: var(--ff-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.gallery-masonry {
+  columns: 3;
+  column-gap: 1.2rem;
+}
+.gallery-masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1.2rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.gallery-masonry-item:hover { border-color: var(--border-accent); transform: scale(1.01); }
+.gallery-overlay-hover {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(6,3,94,0.9) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+.gallery-masonry-item:hover .gallery-overlay-hover { opacity: 1; }
+.gallery-overlay-hover span {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.gallery-overlay-hover small {
+  font-size: 0.72rem;
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.gal-h-sm { height: 180px; }
+.gal-h-md { height: 240px; }
+.gal-h-lg { height: 320px; }
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(2,1,20,0.95);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+.lightbox.open { display: flex; }
+.lightbox-inner {
+  max-width: 650px;
+  width: 90%;
+  background: rgba(6,3,94,0.7);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+}
+.lightbox-close {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: none; border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.lightbox-close:hover { background: rgba(255,255,255,0.1); }
+.lightbox-img-real {
+  width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  border-radius: var(--radius);
+  margin-bottom: 1.2rem;
+  display: block;
+}
+.lightbox-title { font-family: var(--ff-head); font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; }
+.lightbox-desc { font-size: 0.88rem; color: var(--text-secondary); }
+.lightbox-cat {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(91,140,255,0.06) 50%, rgba(255,255,255,0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius);
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+.skeleton-item { break-inside: avoid; margin-bottom: 1.2rem; border-radius: var(--radius); overflow: hidden; }
+
+/* Empty state */
+.gallery-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+}
+.gallery-empty .icon { font-size: 3.5rem; margin-bottom: 1rem; opacity: 0.6; }
+.gallery-empty h3 { font-family: var(--ff-head); font-size: 1.2rem; margin-bottom: 0.5rem; }
+
+@media (max-width: 768px) { .gallery-masonry { columns: 2; } }
+@media (max-width: 480px) { .gallery-masonry { columns: 1; } }
+</style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <div class="brand-icon">
+        <img src="img/hmsi.png" alt="Logo HMSI">
+      </div>
+      <span class="brand-text"><strong>HMSI</strong><br>UNIPEM</span>
+      <div class="brand-icon">
+      <img src="img/karsa.png" alt="Logo kabinet">
+    </div>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link">Beranda</a>
+      <a href="tentang.html" class="nav-link">Tentang HMSI</a>
+      <a href="gallery.html" class="nav-link active">Gallery</a>
+      <a href="event.html" class="nav-link">Event Info</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link dropdown-toggle">Divisi Kami <span>▾</span></a>
+        <div class="dropdown-menu">
+          <a href="divisi.html#lisdm">LisDM</a>
+          <a href="divisi.html#kominfo">Kominfo</a>
+          <a href="divisi.html#kesekretariatan">Kesekretariatan</a>
+          <a href="divisi.html#humas">Humas</a>
+          <a href="divisi.html#sekbend">Sekbend</a>
+        </div>
+      </div>
+      <a href="proker.html" class="nav-link">Program Kerja</a>
+      <a href="kabinet.html" class="nav-link">Profil Kabinet</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-header-content">
+      <div class="breadcrumb"><a href="index.html">Beranda</a> <span>/</span> Gallery</div>
+      <div class="section-tag">Dokumentasi Kegiatan</div>
+      <h1>Gallery <span class="accent">HMSI</span></h1>
+      <p>Kumpulan dokumentasi berbagai kegiatan dan momen berharga HMSI UNIPEM.</p>
+    </div>
+  </div>
+
+  <!-- GALLERY SECTION -->
+  <section class="section" style="background: var(--bg-dark);">
+    <div class="container">
+
+      <!-- FILTER BAR — diisi JS -->
+      <div class="filter-bar fade-up" id="filterBar">
+        <button class="filter-btn active" onclick="filterGallery('all', this)">Semua</button>
+        <!-- Kategori lain dimuat dari API -->
+      </div>
+
+      <!-- GALLERY GRID -->
+      <div class="gallery-masonry fade-up" id="galleryGrid">
+        <!-- Skeleton loading -->
+        <div class="skeleton-item"><div class="skeleton" style="height:280px;"></div></div>
+        <div class="skeleton-item"><div class="skeleton" style="height:200px;"></div></div>
+        <div class="skeleton-item"><div class="skeleton" style="height:320px;"></div></div>
+        <div class="skeleton-item"><div class="skeleton" style="height:240px;"></div></div>
+        <div class="skeleton-item"><div class="skeleton" style="height:180px;"></div></div>
+        <div class="skeleton-item"><div class="skeleton" style="height:260px;"></div></div>
+      </div>
+
+      <!-- Jumlah foto -->
+      <p id="photoCount" style="text-align:center;color:var(--text-secondary);font-size:0.82rem;margin-top:1.5rem;"></p>
+
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" onclick="closeLightbox()">×</button>
+      <div id="lbContent"></div>
+      <span class="lightbox-cat" id="lbCat"></span>
+      <h3 class="lightbox-title" id="lbTitle"></h3>
+      <p class="lightbox-desc" id="lbDesc"></p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+  <img src="img/hmsi.png" alt="Logo HMSI" class="footer-logo">
+
+  <span><strong>HMSI</strong> UNIPEM</span>
+
+  <p>
+    Himpunan Mahasiswa Sistem Informasi
+    Universitas Pembangunan Indonesia
+  </p>
+</div>
+        <div class="footer-links">
+          <h4>Navigasi</h4>
+          <a href="index.html">Beranda</a>
+          <a href="tentang.html">Tentang HMSI</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="event.html">Event Info</a>
+        </div>
+        <div class="footer-links">
+          <h4>Divisi</h4>
+          <a href="divisi.html#lisdm">LisDM</a>
+          <a href="divisi.html#kominfo">Kominfo</a>
+          <a href="divisi.html#humas">Humas</a>
+          <a href="divisi.html#sekbend">Sekbend</a>
+        </div>
+        <div class="footer-links">
+          <h4>Lainnya</h4>
+          <a href="proker.html">Program Kerja</a>
+          <a href="kabinet.html">Profil Kabinet</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 HMSI UNIPEM. All rights reserved.</p></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+  // ============================================================
+  //  CONFIG — sesuaikan path API
+  // ============================================================
+  const GALLERY_API = 'api/gallery/index.php';
+
+  // State
+  let allItems = [];
+  let activeFilter = 'all';
+
+  // ============================================================
+  //  LOAD DATA dari API
+  // ============================================================
+  async function loadGallery() {
+    try {
+      const res  = await fetch(GALLERY_API + '?active=1');
+      const data = await res.json();
+
+      if (!data.success) {
+        showError('Gagal memuat gallery. Silakan coba beberapa saat lagi.');
+        return;
+      }
+
+      allItems = data.data;
+
+      // Render filter buttons
+      buildFilterBar(data.categories);
+
+      // Render foto
+      renderGallery(allItems);
+
+    } catch (err) {
+      console.error('Gallery load error:', err);
+      showError('Koneksi ke server gagal. Pastikan server PHP aktif.');
+    }
+  }
+
+  // ============================================================
+  //  BUILD FILTER BAR
+  // ============================================================
+  function buildFilterBar(categories) {
+    const bar = document.getElementById('filterBar');
+    bar.innerHTML = `<button class="filter-btn active" onclick="filterGallery('all', this)">Semua</button>`;
+    categories.forEach(cat => {
+      bar.innerHTML += `
+        <button class="filter-btn" onclick="filterGallery('${cat.slug}', this)">
+          ${cat.label}
+        </button>`;
+    });
+  }
+
+  // ============================================================
+  //  RENDER GALLERY GRID
+  // ============================================================
+  function renderGallery(items) {
+    const grid = document.getElementById('galleryGrid');
+    const countEl = document.getElementById('photoCount');
+
+    if (!items.length) {
+      grid.innerHTML = `
+        <div class="gallery-empty" style="column-span:all;">
+          <div class="icon">📭</div>
+          <h3>Belum ada foto</h3>
+          <p>Foto kegiatan akan segera ditambahkan.</p>
+        </div>`;
+      countEl.textContent = '';
+      return;
+    }
+
+    const heightMap = { sm: '180px', md: '240px', lg: '320px' };
+
+    grid.innerHTML = items.map(item => {
+      const h = heightMap[item.image_height] || '240px';
+      // Escape untuk onclick attribute
+      const safeTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const safeDesc  = (item.description || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const safeCat   = item.category_label.replace(/'/g, "\\'");
+      const safeSrc   = item.image_path.replace(/'/g, "\\'");
+
+      return `
+        <div class="gallery-masonry-item fade-up"
+             data-cat="${item.category_slug}"
+             onclick="openLightbox('${safeSrc}','${safeTitle}','${safeDesc}','${safeCat}')">
+          <img
+            src="${item.image_path}"
+            alt="${item.title}"
+            style="width:100%;display:block;object-fit:cover;height:${h};"
+            loading="lazy"
+            onerror="this.style.background='rgba(91,140,255,0.1)';this.style.minHeight='${h}'"
+          >
+          <div class="gallery-overlay-hover">
+            <small>${item.category_label}</small>
+            <span>${item.title}</span>
+          </div>
+        </div>`;
+    }).join('');
+
+    countEl.textContent = `Menampilkan ${items.length} foto`;
+
+    // Re-observe fade-up untuk item baru
+    document.querySelectorAll('.fade-up:not(.observed)').forEach(el => {
+      el.classList.add('observed');
+      if (typeof observer !== 'undefined') observer.observe(el);
+      else el.classList.add('visible');
+    });
+  }
+
+  // ============================================================
+  //  FILTER
+  // ============================================================
+  function filterGallery(cat, btn) {
+    activeFilter = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const filtered = cat === 'all'
+      ? allItems
+      : allItems.filter(i => i.category_slug === cat);
+
+    renderGallery(filtered);
+  }
+
+  // ============================================================
+  //  LIGHTBOX
+  // ============================================================
+  function openLightbox(src, title, desc, cat) {
+    document.getElementById('lbContent').innerHTML =
+      `<img src="${src}" alt="${title}" class="lightbox-img-real">`;
+    document.getElementById('lbCat').textContent   = cat;
+    document.getElementById('lbTitle').textContent = title;
+    document.getElementById('lbDesc').textContent  = desc;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox(e) {
+    if (!e || e.target === document.getElementById('lightbox') || e.target.classList.contains('lightbox-close')) {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Tutup lightbox dengan Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox({ target: document.getElementById('lightbox') });
+  });
+
+  // ============================================================
+  //  ERROR STATE
+  // ============================================================
+  function showError(msg) {
+    document.getElementById('galleryGrid').innerHTML = `
+      <div class="gallery-empty" style="column-span:all;">
+        <div class="icon">⚠️</div>
+        <h3>Terjadi Kesalahan</h3>
+        <p>${msg}</p>
+      </div>`;
+  }
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  loadGallery();
+  </script>
+</body>
+</html>

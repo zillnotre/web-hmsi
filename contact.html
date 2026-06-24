@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact - HMSI UNIPEM</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.contact-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 3rem;
+  align-items: start;
+}
+.contact-left { display: flex; flex-direction: column; gap: 1.2rem; }
+
+.contact-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s;
+}
+.contact-card:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+  transform: translateX(4px);
+}
+.contact-card-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  background: rgba(91,140,255,0.1);
+  border: 1px solid var(--border-accent);
+}
+.contact-card-body h4 {
+  font-family: var(--ff-head);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.contact-card-body p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.contact-card-body a {
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+.contact-card-body a:hover { color: #7aaeff; }
+
+.sosmed-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+}
+.sosmed-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.sosmed-btn:hover {
+  border-color: var(--border-accent);
+  color: var(--text-primary);
+  background: rgba(91,140,255,0.08);
+}
+.sosmed-icon { font-size: 1.1rem; }
+
+.form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+}
+.form-title {
+  font-family: var(--ff-head);
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+}
+.form-sub {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-group label { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: var(--text-primary);
+  font-family: var(--ff-body);
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  outline: none;
+  width: 100%;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--accent);
+  background: rgba(91,140,255,0.05);
+  box-shadow: 0 0 0 3px rgba(91,140,255,0.1);
+}
+.form-group textarea { resize: vertical; min-height: 130px; }
+.form-group select option { background: #060358; }
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+.form-check input[type="checkbox"] {
+  width: 16px; height: 16px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 2rem;
+}
+.form-success .check { font-size: 3.5rem; margin-bottom: 1rem; }
+.form-success h3 { font-family: var(--ff-head); font-size: 1.3rem; margin-bottom: 0.5rem; }
+.form-success p { color: var(--text-secondary); font-size: 0.9rem; }
+
+.faq-section { margin-top: 5rem; }
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--ff-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 1.3rem 0;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: color 0.2s;
+}
+.faq-question:hover { color: var(--accent); }
+.faq-arrow { font-size: 0.8rem; transition: transform 0.3s; }
+.faq-item.open .faq-arrow { transform: rotate(180deg); }
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.faq-item.open .faq-answer { max-height: 200px; }
+.faq-answer-inner {
+  padding-bottom: 1.2rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .contact-wrapper { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+   <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+
+  <div class="brand-icon">
+    <img src="img/hmsi.png" alt="Logo HMSI">
+  </div>
+
+
+  <span class="brand-text">
+    <strong>HMSI</strong><br>
+    UNIPEM
+  </span>
+<div class="brand-icon">
+      <img src="img/karsa.png" alt="Logo kabinet">
+    </div>
+</div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link active">Beranda</a>
+      <a href="tentang.html" class="nav-link">Tentang HMSI</a>
+      <a href="gallery.html" class="nav-link">Gallery</a>
+      <a href="event.html" class="nav-link">Event Info</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link dropdown-toggle">Divisi Kami <span>▾</span></a>
+        <div class="dropdown-menu">
+          <a href="divisi.html#lisdm">LisDM</a>
+          <a href="divisi.html#kominfo">Kominfo</a>
+          <a href="divisi.html#kesekretariatan">Kesekretariatan</a>
+          <a href="divisi.html#humas">Humas</a>
+          <a href="divisi.html#sekbend">Sekbend</a>
+        </div>
+      </div>
+      <a href="proker.html" class="nav-link">Program Kerja</a>
+      <a href="kabinet.html" class="nav-link">Profil Kabinet</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-header-content">
+      <div class="breadcrumb"><a href="index.html">Beranda</a> <span>/</span> Contact</div>
+      <div class="section-tag">Hubungi Kami</div>
+      <h1>Kontak & <span class="accent">Pesan</span></h1>
+      <p>Ada pertanyaan atau ingin berkolaborasi? Kami siap mendengar dan merespons dengan cepat.</p>
+    </div>
+  </div>
+
+  <section class="section" style="background: var(--bg-dark);">
+    <div class="container">
+      <div class="contact-wrapper">
+
+        <!-- LEFT: INFO -->
+        <div class="contact-left fade-up">
+          <div class="contact-card">
+            <div class="contact-card-icon">📍</div>
+            <div class="contact-card-body">
+              <h4>Alamat Sekretariat</h4>
+              <p>Jl. Kadu Jaya<br>Curug<br>Cikupa, 15710</p>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-card-icon">📧</div>
+            <div class="contact-card-body">
+              <h4>Email Resmi</h4>
+              <a href="mailto:hmsi@unipem.ac.id">hmsi@unipem.ac.id</a>
+              <p style="margin-top:0.2rem;font-size:0.78rem;">Respons dalam 1–2 hari kerja</p>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-card-icon">📞</div>
+            <div class="contact-card-body">
+              <h4>WhatsApp</h4>
+              <a href="https://wa.me/6281234567890">+62 812-3456-7890</a>
+              <p style="margin-top:0.2rem;font-size:0.78rem;">Senin – Jumat, 08.00–17.00 WIB</p>
+            </div>
+          </div>
+
+        
+
+          <!-- SOSMED -->
+          <div>
+            <h4 style="font-family:var(--ff-head);font-size:0.9rem;margin-bottom:0.8rem;">Media Sosial</h4>
+            <div class="sosmed-grid">
+              <a class="sosmed-btn" href="#"><span class="sosmed-icon">📸</span> Instagram</a>
+              <a class="sosmed-btn" href="#"><span class="sosmed-icon">💬</span> WhatsApp</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: FORM -->
+        <div class="fade-up">
+          <div class="form-card">
+            <div id="formContent">
+              <div class="form-title">Kirim Pesan</div>
+              <div class="form-sub">Isi formulir di bawah ini dan kami akan segera menghubungi Anda.</div>
+
+              <div style="display:flex;flex-direction:column;gap:1.2rem;">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Nama Lengkap *</label>
+                    <input type="text" id="fname" placeholder="Masukkan nama lengkap" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="femail" placeholder="nama@email.com" required>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>No. WhatsApp</label>
+                    <input type="tel" id="fphone" placeholder="08xxxxxxxxxx">
+                  </div>
+                  <div class="form-group">
+                    <label>Instansi / Kampus</label>
+                    <input type="text" id="forg" placeholder="Nama instansi Anda">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Keperluan *</label>
+                  <select id="ftype">
+                    <option value="">— Pilih keperluan —</option>
+                    <option>Pendaftaran Event / Workshop</option>
+                    <option>Kolaborasi & Kemitraan</option>
+                    <option>Sponsorship Kegiatan</option>
+                    <option>Informasi Keanggotaan</option>
+                    <option>Liputan Media</option>
+                    <option>Lainnya</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Subjek *</label>
+                  <input type="text" id="fsubject" placeholder="Tulis subjek pesan Anda">
+                </div>
+
+                <div class="form-group">
+                  <label>Pesan *</label>
+                  <textarea id="fmessage" placeholder="Tuliskan pesan atau pertanyaan Anda secara lengkap..."></textarea>
+                </div>
+
+                <div class="form-check">
+                  <input type="checkbox" id="fcheck">
+                  <label for="fcheck">Saya menyetujui bahwa data yang saya berikan akan digunakan oleh HMSI UNIPEM untuk keperluan komunikasi sesuai permintaan saya.</label>
+                </div>
+
+                <button id="sendBtn"
+        class="btn-primary"
+        style="width:100%;justify-content:center;padding:1rem;"
+        onclick="submitForm()">
+    Kirim Pesan ✉️
+</button>
+              </div>
+            </div>
+
+            <!-- SUCCESS -->
+            <div class="form-success" id="formSuccess">
+              <div class="check">✅</div>
+              <h3>Pesan Terkirim!</h3>
+              <p>Terima kasih telah menghubungi kami. Tim HMSI UNIPEM akan segera merespons pesan Anda dalam 1–2 hari kerja.</p>
+              <button class="btn-outline" style="margin-top:1.5rem;" onclick="resetForm()">Kirim Pesan Lain</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MAP PLACEHOLDER -->
+      <div style="margin-top:4rem;" class="fade-up">
+        <div class="section-tag">Lokasi</div>
+        <h2 class="section-title" style="margin-bottom:1.5rem;">Temukan <span class="accent">Kami</span></h2>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.8rem;overflow:hidden;position:relative;">
+          <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(91,140,255,0.06) 1px,transparent 1px);background-size:30px 30px;"></div>
+          <div style="font-size:3rem;position:relative;">📍</div>
+          <div style="font-family:var(--ff-head);font-size:1.1rem;font-weight:700;position:relative;">Universitas Insan Pembangunan Indonesia</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);position:relative;">Jl. Raya Serang No.Km.10, Kadu Jaya, Kec. Curug, Kabupaten Tangerang, Banten 15810</div>
+          <a href="https://maps.google.com" target="_blank" class="btn-outline" style="margin-top:0.5rem;position:relative;">Buka di Google Maps →</a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="faq-section fade-up">
+        <div class="section-tag">FAQ</div>
+        <h2 class="section-title" style="margin-bottom:2rem;">Pertanyaan yang <span class="accent">Sering Ditanya</span></h2>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Bagaimana cara bergabung menjadi anggota HMSI? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Kamu bisa bergabung dengan mengikuti proses rekrutmen yang biasanya dibuka di awal semester. Pantau media sosial kami untuk informasi terbaru tentang jadwal rekrutmen dan persyaratannya.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Apakah event HMSI terbuka untuk umum? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Sebagian besar event kami terbuka untuk umum, terutama seminar dan workshop. Beberapa kegiatan khusus hanya untuk anggota aktif HMSI. Cek halaman Event Info untuk detail setiap kegiatan.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Bagaimana cara bermitra atau mensponsori kegiatan HMSI? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Untuk kemitraan dan sponsorship, silakan hubungi kami melalui email hmsi@unipem.ac.id atau isi formulir kontak di atas dengan memilih "Sponsorship Kegiatan". Tim Humas kami akan segera menghubungi Anda.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Di mana lokasi sekretariat HMSI? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Sekretariat HMSI berlokasi di Gedung Student Center Lantai 2, Ruang HMSI, kampus Universitas Pembangunan. Kami buka Senin–Jumat pukul 09.00–17.00 WIB.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Berapa lama waktu respons untuk pesan yang dikirimkan? <span class="faq-arrow">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Kami biasanya merespons pesan dalam 1–2 hari kerja. Untuk pertanyaan mendesak, Anda dapat menghubungi kami langsung melalui WhatsApp di nomor yang tertera.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+  <img src="img/hmsi.png" alt="Logo HMSI" class="footer-logo">
+
+  <span><strong>HMSI</strong> UNIPEM</span>
+
+  <p>
+    Himpunan Mahasiswa Sistem Informasi
+    Universitas Pembangunan Indonesia
+  </p>
+</div>
+        <div class="footer-links"><h4>Navigasi</h4><a href="index.html">Beranda</a><a href="tentang.html">Tentang HMSI</a><a href="gallery.html">Gallery</a><a href="event.html">Event Info</a></div>
+        <div class="footer-links"><h4>Divisi</h4><a href="divisi.html#lisdm">LisDM</a><a href="divisi.html#kominfo">Kominfo</a><a href="divisi.html#humas">Humas</a><a href="divisi.html#sekbend">Sekbend</a></div>
+        <div class="footer-links"><h4>Lainnya</h4><a href="proker.html">Program Kerja</a><a href="kabinet.html">Profil Kabinet</a><a href="contact.html">Contact</a></div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 HMSI UNIPEM. All rights reserved.</p></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    async function submitForm() {
+
+    const data = {
+        nama: document.getElementById('fname').value.trim(),
+        email: document.getElementById('femail').value.trim(),
+        whatsapp: document.getElementById('fphone').value.trim(),
+        instansi: document.getElementById('forg').value.trim(),
+        keperluan: document.getElementById('ftype').value,
+        subjek: document.getElementById('fsubject').value.trim(),
+        pesan: document.getElementById('fmessage').value.trim(),
+        persetujuan: document.getElementById('fcheck').checked
+    };
+
+    if (
+        !data.nama ||
+        !data.email ||
+        !data.keperluan ||
+        !data.subjek ||
+        !data.pesan ||
+        !data.persetujuan
+    ) {
+        alert('Mohon lengkapi semua field yang wajib diisi.');
+        return;
+    }
+
+    try {
+
+        const response = await fetch('send_whatsapp.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if(result.status){
+            document.getElementById('formContent').style.display = 'none';
+            document.getElementById('formSuccess').style.display = 'block';
+        } else {
+            alert('Gagal mengirim pesan');
+        }
+
+    } catch(err){
+        alert('Terjadi kesalahan koneksi');
+        console.error(err);
+    }
+}
+    function resetForm() {
+      document.getElementById('formContent').style.display = 'block';
+      document.getElementById('formSuccess').style.display = 'none';
+      ['fname','femail','fphone','forg','fsubject','fmessage'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('ftype').value = '';
+      document.getElementById('fcheck').checked = false;
+    }
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+  </script>
+</body>
+</html>

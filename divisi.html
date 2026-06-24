@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divisi Kami - HMSI UNIPEM</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+
+/* ===== STICKY DIVISI NAV ===== */
+.divisi-nav-sticky {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 100;
+  background: rgba(2,1,20,0.96);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+}
+.divisi-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  overflow-x: auto;
+  padding: 0 1rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.divisi-nav-inner::-webkit-scrollbar { display: none; }
+@media (max-width: 768px) {
+  .divisi-nav-inner {
+    justify-content: flex-start;
+  }
+}
+.divisi-nav-btn {
+  padding: 1.1rem 1.5rem;
+  font-size: 0.83rem;
+  font-weight: 600;
+  font-family: var(--ff-body);
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.divisi-nav-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px 2px 0 0;
+  transform: scaleX(0);
+  transition: transform 0.25s;
+}
+.divisi-nav-btn:hover { color: var(--text-primary); }
+.divisi-nav-btn.active { color: var(--accent); }
+.divisi-nav-btn.active::after { transform: scaleX(1); }
+
+/* ===== DIVISI OVERVIEW CARDS (top) ===== */
+.divisi-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  margin-bottom: 4rem;
+}
+.divisi-overview-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.divisi-overview-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  border-radius: var(--radius-lg);
+}
+.divisi-overview-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--border-accent);
+}
+.divisi-overview-card:hover::before { opacity: 1; }
+.divisi-ov-icon {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 0.8rem;
+}
+.divisi-ov-name {
+  font-family: var(--ff-head);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.divisi-ov-full {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+.divisi-ov-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+/* ===== DIVISI BLOCK ===== */
+.divisi-block {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: calc(var(--nav-h) + 58px);
+}
+.divisi-block:nth-child(odd) { background: rgba(6,3,94,0.3); }
+.divisi-block:nth-child(even) { background: var(--bg-dark); }
+
+/* ===== DIVISI HEADER ===== */
+.divisi-header-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2.5rem;
+  align-items: flex-start;
+  margin-bottom: 3.5rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--border);
+}
+.divisi-icon-big {
+  width: 96px; height: 96px;
+  border-radius: var(--radius-lg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+  flex-shrink: 0;
+}
+.divisi-title-group h2 {
+  font-family: var(--ff-head);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+  line-height: 1.1;
+}
+.divisi-title-group .full-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.divisi-title-group .full-name::after {
+  content: '';
+  flex: 0 0 40px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.4;
+  border-radius: 2px;
+}
+.divisi-title-group p {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 640px;
+  font-size: 0.95rem;
+}
+.divisi-meta-badges {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+  flex-wrap: wrap;
+}
+.divisi-meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: var(--bg-card);
+}
+
+/* ===== TUGAS LIST ===== */
+.tugas-section-title {
+  font-family: var(--ff-head);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+}
+.tugas-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+.tugas-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  line-height: 1.5;
+}
+.tugas-item:hover { border-color: var(--border-accent); background: var(--bg-card-hover); color: var(--text-primary); }
+.tugas-dot {
+  font-size: 0.55rem;
+  margin-top: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* ===== DIVISI CONTENT GRID ===== */
+.divisi-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* ===== ORG CHART PER DIVISI ===== */
+.org-chart-scroll-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.5rem;
+}
+.divisi-org-chart {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.5rem;
+  position: sticky;
+  top: calc(var(--nav-h) + 70px);
+}
+.divisi-org-title {
+  font-family: var(--ff-head);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.org-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.org-node-box {
+  width: 100%;
+  max-width: 240px;
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius);
+  text-align: center;
+  transition: all 0.2s;
+}
+.org-node-box:hover { transform: scale(1.02); }
+.org-node-box.is-head {
+  background: linear-gradient(135deg, rgba(91,140,255,0.2), rgba(91,140,255,0.05));
+  border: 1.5px solid var(--accent);
+}
+.org-node-box.is-member {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+}
+.org-node-box .on-role {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.3rem;
+}
+.org-node-box.is-head .on-role { color: var(--accent); }
+.org-node-box.is-member .on-role { color: var(--text-muted); }
+.org-node-box .on-name {
+  font-family: var(--ff-head);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.15rem;
+}
+.org-node-box .on-nim {
+  font-size: 0.67rem;
+  color: var(--text-muted);
+}
+.org-arrow {
+  width: 1.5px;
+  height: 22px;
+  background: var(--border-accent);
+  opacity: 0.6;
+}
+.org-members-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+.org-members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  align-items: center;
+}
+.org-members-list .org-arrow { height: 14px; }
+.org-member-item {
+  width: 100%;
+  max-width: 240px;
+}
+
+/* ===== MEMBER CARDS ===== */
+.member-section-title {
+  font-family: var(--ff-head);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.member-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.team-cards-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.team-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.3s;
+  position: relative;
+}
+.team-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(91,140,255,0.12);
+}
+.team-card.is-kadiv {
+  border-color: rgba(91,140,255,0.35);
+  background: linear-gradient(135deg, rgba(91,140,255,0.08), rgba(91,140,255,0.02));
+}
+.team-card.is-kadiv::before {
+  content: 'KADIV';
+  position: absolute;
+  top: 0.6rem; right: 0.6rem;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: rgba(91,140,255,0.15);
+  border: 1px solid rgba(91,140,255,0.3);
+  padding: 0.15rem 0.45rem;
+  border-radius: 50px;
+  z-index: 2;
+}
+.team-photo {
+  height: 320px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(91,140,255,0.12), rgba(167,139,250,0.08));
+  display: flex; align-items: center; justify-content: center;
+}
+.team-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 0.4s;
+}
+.team-card:hover .team-photo img { transform: scale(1.05); }
+.team-info {
+  padding: 1rem;
+  text-align: center;
+}
+.team-name {
+  font-family: var(--ff-head);
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+}
+.team-role {
+  font-size: 0.71rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.team-nim {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* --- Tablet landscape (≤1024px) --- */
+@media (max-width: 1024px) {
+  .divisi-content-grid {
+    grid-template-columns: 1fr;
+  }
+  .divisi-org-chart {
+    position: static;
+    max-width: 100%;
+  }
+  .divisi-overview-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .team-photo { height: 260px; }
+}
+
+/* --- Tablet portrait (≤768px) --- */
+@media (max-width: 768px) {
+  .divisi-header-row {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+  }
+  .divisi-icon-big {
+    width: 72px; height: 72px;
+    font-size: 2.2rem;
+    margin: 0 auto;
+  }
+  .divisi-title-group h2 { text-align: center; }
+  .divisi-title-group .full-name { justify-content: center; }
+  .divisi-title-group p { text-align: center; margin: 0 auto; }
+  .divisi-meta-badges { justify-content: center; }
+
+  .tugas-list { grid-template-columns: 1fr; }
+  .divisi-overview-grid { grid-template-columns: repeat(3, 1fr); }
+  .team-cards-wrap { grid-template-columns: repeat(2, 1fr); }
+  .team-photo { height: 200px; }
+
+  /* Org chart horizontal flow on tablet */
+  .divisi-org-chart { padding: 1.5rem 1rem; }
+  .org-node {
+    flex-direction: row;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  .org-node-box { min-width: 140px; max-width: 160px; }
+  .org-arrow {
+    width: 22px;
+    height: 1.5px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .org-members-list {
+    flex-direction: row;
+    gap: 0;
+    align-items: flex-start;
+  }
+  .org-members-list .org-arrow {
+    width: 14px;
+    height: 1.5px;
+    align-self: center;
+  }
+  .org-member-item { min-width: 130px; max-width: 150px; }
+
+  .divisi-block { padding: 3rem 0; }
+  .member-section-title { font-size: 1rem; }
+}
+
+/* --- Mobile (≤600px) --- */
+@media (max-width: 600px) {
+  .divisi-overview-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .divisi-ov-name { font-size: 0.9rem; }
+  .divisi-ov-full { font-size: 0.62rem; }
+  .divisi-ov-count { font-size: 0.65rem; }
+  .divisi-ov-icon { width: 44px; height: 44px; font-size: 1.4rem; }
+
+  .team-cards-wrap { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; }
+  .team-photo { height: 240px; }
+
+  .tugas-item { font-size: 0.8rem; }
+
+  .divisi-nav-btn { padding: 0.9rem 1rem; font-size: 0.76rem; gap: 0.25rem; }
+
+  /* Org chart stays horizontal but scrollable on small phones */
+  .divisi-org-chart { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .org-node { min-width: max-content; }
+  .org-node-box { min-width: 120px; max-width: 140px; padding: 0.7rem 0.8rem; }
+  .org-node-box .on-name { font-size: 0.78rem; }
+  .org-node-box .on-nim { font-size: 0.6rem; }
+  .org-node-box .on-role { font-size: 0.58rem; }
+  .org-members-list { min-width: max-content; }
+  .org-member-item { min-width: 110px; max-width: 130px; }
+
+  .divisi-block { padding: 2.5rem 0; }
+}
+
+/* --- Small mobile (≤400px) --- */
+@media (max-width: 400px) {
+  .divisi-overview-grid { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .divisi-nav-btn { padding: 0.75rem 0.7rem; font-size: 0.7rem; }
+  .divisi-header-row { gap: 1rem; }
+  .divisi-title-group h2 { font-size: 1.6rem; }
+  .team-cards-wrap { max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <div class="brand-icon">
+        <img src="img/hmsi.png" alt="Logo HMSI">
+      </div>
+      <span class="brand-text"><strong>HMSI</strong><br>UNIPEM</span>
+      <div class="brand-icon">
+      <img src="img/karsa.png" alt="Logo kabinet">
+    </div>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link">Beranda</a>
+      <a href="tentang.html" class="nav-link">Tentang HMSI</a>
+      <a href="gallery.html" class="nav-link">Gallery</a>
+      <a href="event.html" class="nav-link">Event Info</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link dropdown-toggle active">Divisi Kami <span>▾</span></a>
+        <div class="dropdown-menu">
+          <a href="divisi.html#lisdm">LisDM</a>
+          <a href="divisi.html#kominfo">Kominfo</a>
+          <a href="divisi.html#kesekretariatan">Kesekretariatan</a>
+          <a href="divisi.html#humas">Humas</a>
+          <a href="divisi.html#sekbend">Sekbend</a>
+        </div>
+      </div>
+      <a href="proker.html" class="nav-link">Program Kerja</a>
+      <a href="kabinet.html" class="nav-link">Profil Kabinet</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-content">
+      <div class="breadcrumb"><a href="index.html">Beranda</a> <span>/</span> Divisi Kami</div>
+      <div class="section-tag">Struktur Organisasi</div>
+      <h1>Divisi <span class="accent">Kami</span></h1>
+      <p>Lima divisi yang bekerja sinergis membangun HMSI yang unggul dan berprestasi.</p>
+    </div>
+  </div>
+
+  <!-- STICKY DIVISI NAV -->
+  <div class="divisi-nav-sticky">
+    <div class="divisi-nav-inner">
+      <button class="divisi-nav-btn active" onclick="goTo('lisdm',this)">👥 LisDM</button>
+      <button class="divisi-nav-btn" onclick="goTo('kominfo',this)">📡 Kominfo</button>
+      <button class="divisi-nav-btn" onclick="goTo('kesekretariatan',this)">📋 Kesekretariatan</button>
+      <button class="divisi-nav-btn" onclick="goTo('humas',this)">🤝 Humas</button>
+      <button class="divisi-nav-btn" onclick="goTo('sekbend',this)">💼 Sekbend</button>
+    </div>
+  </div>
+
+  <!-- OVERVIEW CARDS -->
+  <section class="section" style="background: var(--bg-dark); padding: 3rem 0 0;">
+    <div class="container">
+      <div class="divisi-overview-grid fade-up">
+
+        <div class="divisi-overview-card" onclick="goTo('lisdm')" style="border-top: 3px solid #5b8cff;">
+          <div class="divisi-ov-icon" style="background: rgba(91,140,255,0.12); border: 1px solid rgba(91,140,255,0.25);">👥</div>
+          <div class="divisi-ov-name">LisDM</div>
+          <div class="divisi-ov-full" style="color:#5b8cff;">Litbang & SDM</div>
+          <div class="divisi-ov-count">6 Anggota</div>
+        </div>
+
+        <div class="divisi-overview-card" onclick="goTo('kominfo')" style="border-top: 3px solid #a78bfa;">
+          <div class="divisi-ov-icon" style="background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.25);">📡</div>
+          <div class="divisi-ov-name">Kominfo</div>
+          <div class="divisi-ov-full" style="color:#a78bfa;">Komunikasi & Info</div>
+          <div class="divisi-ov-count">6 Anggota</div>
+        </div>
+
+        <div class="divisi-overview-card" onclick="goTo('kesekretariatan')" style="border-top: 3px solid #34d399;">
+          <div class="divisi-ov-icon" style="background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.25);">📋</div>
+          <div class="divisi-ov-name">Kesekretariatan.</div>
+          <div class="divisi-ov-full" style="color:#34d399;">Kesekretariatan</div>
+          <div class="divisi-ov-count">2 Anggota</div>
+        </div>
+
+        <div class="divisi-overview-card" onclick="goTo('humas')" style="border-top: 3px solid #fbbf24;">
+          <div class="divisi-ov-icon" style="background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.25);">🤝</div>
+          <div class="divisi-ov-name">Humas</div>
+          <div class="divisi-ov-full" style="color:#fbbf24;">Hubungan Masyarakat</div>
+          <div class="divisi-ov-count">3 Anggota</div>
+        </div>
+
+        <div class="divisi-overview-card" onclick="goTo('sekbend')" style="border-top: 3px solid #f97316;">
+          <div class="divisi-ov-icon" style="background: rgba(249,115,22,0.12); border: 1px solid rgba(249,115,22,0.25);">💼</div>
+          <div class="divisi-ov-name">Sekbend</div>
+          <div class="divisi-ov-full" style="color:#f97316;">Sekretaris & Bendahara</div>
+          <div class="divisi-ov-count">4 Anggota</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= -->
+  <!-- DIVISI LISDM                  -->
+  <!-- ============================= -->
+  <div class="divisi-block" id="lisdm">
+    <div class="container">
+
+      <!-- HEADER -->
+      <div class="divisi-header-row fade-up">
+        <div class="divisi-icon-big" style="background: linear-gradient(135deg,rgba(91,140,255,0.2),rgba(91,140,255,0.04)); border: 1.5px solid rgba(91,140,255,0.35);">👥</div>
+        <div class="divisi-title-group">
+          <h2>LisDM</h2>
+          <div class="full-name" style="color:#5b8cff;">Litbang &amp; Sumber Daya Manusia</div>
+          <p>Divisi yang bertanggung jawab dalam pengembangan anggota melalui penelitian, pelatihan, dan peningkatan kualitas sumber daya manusia di lingkungan HMSI UNIPEM.</p>
+          <div class="divisi-meta-badges">
+            <span class="divisi-meta-badge">📅 Periode 2025–2026</span>
+            <span class="divisi-meta-badge">👥 6 Anggota</span>
+            <span class="divisi-meta-badge">🎯 SDM & Riset</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT GRID: Tugas + Org Chart -->
+      <div class="divisi-content-grid">
+        <div>
+          <!-- TUGAS -->
+          <p class="tugas-section-title fade-up">Tugas & Tanggung Jawab</p>
+          <div class="tugas-list fade-up">
+            <div class="tugas-item"><span class="tugas-dot" style="color:#5b8cff;">●</span>Merancang dan melaksanakan program pengembangan SDM anggota HMSI</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#5b8cff;">●</span>Menyelenggarakan kegiatan pelatihan, workshop, dan seminar internal</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#5b8cff;">●</span>Melakukan penelitian dan kajian terkait isu-isu kemahasiswaan</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#5b8cff;">●</span>Mengelola data dan informasi keanggotaan HMSI secara sistematis</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#5b8cff;">●</span>Memfasilitasi rekrutmen anggota baru HMSI setiap periode</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#5b8cff;">●</span>Mengembangkan program mentoring dan pembinaan anggota</div>
+          </div>
+
+          <!-- ANGGOTA -->
+          <div class="member-section-title fade-up">Anggota Divisi</div>
+          <div class="team-cards-wrap fade-up"
+     id="anggota-lisdm">
+</div>
+        </div>
+
+        <!-- ORG CHART -->
+        <div class="divisi-org-chart fade-up">
+          <div class="divisi-org-title">Struktur Divisi LisDM</div>
+          <div class="org-chart-scroll-wrap"><div class="org-node">
+            <div class="org-node-box is-head" style="border-color:#5b8cff;">
+              <div class="on-role" style="color:#5b8cff;">Ketua Divisi</div>
+              <div class="on-name">M. Naufal Nazil</div>
+              <div class="on-nim">NIM: 2025804048</div>
+            </div>
+            <div class="org-arrow" style="background:#5b8cff;opacity:0.5;"></div>
+            <div class="org-members-list">
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Siti Fatimah</div><div class="on-nim">—</div></div></div>
+              <div class="org-arrow"></div>
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Yasril Pajri</div><div class="on-nim">2022110025</div></div></div>
+              <div class="org-arrow"></div>
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Sulthan Rafi</div><div class="on-nim">2023110008</div></div></div>
+              <div class="org-arrow"></div>
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Dinda Putri</div><div class="on-nim">2023110008</div></div></div>
+              <div class="org-arrow"></div>
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Suci Haryanti</div><div class="on-nim">2023110008</div></div></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- DIVISI KOMINFO                -->
+  <!-- ============================= -->
+  <div class="divisi-block" id="kominfo">
+    <div class="container">
+
+      <div class="divisi-header-row fade-up">
+        <div class="divisi-icon-big" style="background: linear-gradient(135deg,rgba(167,139,250,0.2),rgba(167,139,250,0.04)); border: 1.5px solid rgba(167,139,250,0.35);">📡</div>
+        <div class="divisi-title-group">
+          <h2>Kominfo</h2>
+          <div class="full-name" style="color:#a78bfa;">Komunikasi &amp; Informasi</div>
+          <p>Divisi yang bertugas mengelola arus informasi, media sosial, dan komunikasi organisasi HMSI kepada seluruh anggota dan masyarakat luas secara profesional dan kreatif.</p>
+          <div class="divisi-meta-badges">
+            <span class="divisi-meta-badge">📅 Periode 2025–2026</span>
+            <span class="divisi-meta-badge">👥 6 Anggota</span>
+            <span class="divisi-meta-badge">📢 Media & Desain</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divisi-content-grid">
+        <div>
+          <p class="tugas-section-title fade-up">Tugas & Tanggung Jawab</p>
+          <div class="tugas-list fade-up">
+            <div class="tugas-item"><span class="tugas-dot" style="color:#a78bfa;">●</span>Mengelola seluruh platform media sosial dan website resmi HMSI</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#a78bfa;">●</span>Membuat konten kreatif dan informatif untuk publikasi organisasi</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#a78bfa;">●</span>Merancang materi desain grafis, poster, dan banner kegiatan</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#a78bfa;">●</span>Mendokumentasikan seluruh kegiatan dan acara HMSI</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#a78bfa;">●</span>Menyebarkan informasi internal maupun eksternal organisasi</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#a78bfa;">●</span>Mengelola branding dan identitas visual HMSI secara konsisten</div>
+          </div>
+
+          <div class="member-section-title fade-up">Anggota Divisi</div>
+          <div class="team-cards-wrap fade-up"
+     id="anggota-kominfo">
+</div>
+        </div>
+
+        <div class="divisi-org-chart fade-up">
+          <div class="divisi-org-title">Struktur Divisi Kominfo</div>
+          <div class="org-chart-scroll-wrap"><div class="org-node">
+            <div class="org-node-box is-head" style="border-color:#a78bfa;">
+              <div class="on-role" style="color:#a78bfa;">Kepala Divisi</div>
+              <div class="on-name">Septian Riziq</div>
+              <div class="on-nim">NIM: 2022110033</div>
+            </div>
+            <div class="org-arrow" style="background:#a78bfa;opacity:0.5;"></div>
+            <div class="org-members-list">
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Juwita</div><div class="on-nim">2022110041</div></div></div>
+              <div class="org-arrow"></div>
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Ferdin Aprianus</div><div class="on-nim">2022110055</div></div></div>
+              <div class="org-arrow"></div>
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Wandika Steven</div><div class="on-nim">2023110016</div></div></div>
+              <div class="org-arrow"></div>
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Sasa</div><div class="on-nim">2023110016</div></div></div>
+              <div class="org-arrow"></div>
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Ahmad Faizal</div><div class="on-nim">2023110016</div></div></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- DIVISI KESEKRETARIATAN        -->
+  <!-- ============================= -->
+  <div class="divisi-block" id="kesekretariatan">
+    <div class="container">
+
+      <div class="divisi-header-row fade-up">
+        <div class="divisi-icon-big" style="background: linear-gradient(135deg,rgba(52,211,153,0.2),rgba(52,211,153,0.04)); border: 1.5px solid rgba(52,211,153,0.35);">📋</div>
+        <div class="divisi-title-group">
+          <h2>Kesekretariatan</h2>
+          <div class="full-name" style="color:#34d399;">Administrasi &amp; Dokumentasi</div>
+          <p>Divisi yang bertanggung jawab atas pengelolaan administrasi, surat-menyurat, arsip, dan dokumentasi resmi organisasi HMSI UNIPEM secara tertib dan sistematis.</p>
+          <div class="divisi-meta-badges">
+            <span class="divisi-meta-badge">📅 Periode 2025–2026</span>
+            <span class="divisi-meta-badge">👥 2 Anggota</span>
+            <span class="divisi-meta-badge">📁 Administrasi</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divisi-content-grid">
+        <div>
+          <p class="tugas-section-title fade-up">Tugas & Tanggung Jawab</p>
+          <div class="tugas-list fade-up">
+            <div class="tugas-item"><span class="tugas-dot" style="color:#34d399;">●</span>Mengelola seluruh surat masuk dan surat keluar organisasi</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#34d399;">●</span>Membuat dan mendistribusikan notulen rapat pengurus</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#34d399;">●</span>Mengarsipkan dokumen dan administrasi kegiatan organisasi</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#34d399;">●</span>Mempersiapkan kelengkapan administrasi setiap kegiatan</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#34d399;">●</span>Menjaga ketertiban dan kerapian sistem pengarsipan digital</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#34d399;">●</span>Menyusun laporan pertanggungjawaban kegiatan</div>
+          </div>
+
+          <div class="member-section-title fade-up">Anggota Divisi</div>
+          <div class="team-cards-wrap fade-up"
+     id="anggota-kesekretariatan">
+</div>
+        </div>
+
+        <div class="divisi-org-chart fade-up">
+          <div class="divisi-org-title">Struktur Divisi Kesekretariatan</div>
+          <div class="org-chart-scroll-wrap"><div class="org-node">
+            <div class="org-node-box is-head" style="border-color:#34d399;">
+              <div class="on-role" style="color:#34d399;">Kepala Divisi</div>
+              <div class="on-name">Serlyn</div>
+              <div class="on-nim">NIM: 2022110074</div>
+            </div>
+            <div class="org-arrow" style="background:#34d399;opacity:0.5;"></div>
+            <div class="org-members-list">
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Bunga</div><div class="on-nim">2023110027</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- DIVISI HUMAS                  -->
+  <!-- ============================= -->
+  <div class="divisi-block" id="humas">
+    <div class="container">
+
+      <div class="divisi-header-row fade-up">
+        <div class="divisi-icon-big" style="background: linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.04)); border: 1.5px solid rgba(251,191,36,0.35);">🤝</div>
+        <div class="divisi-title-group">
+          <h2>Humas</h2>
+          <div class="full-name" style="color:#fbbf24;">Hubungan Masyarakat</div>
+          <p>Divisi yang berfokus membangun dan memelihara hubungan baik antara HMSI dengan berbagai pihak eksternal termasuk instansi, komunitas, dan mitra strategis.</p>
+          <div class="divisi-meta-badges">
+            <span class="divisi-meta-badge">📅 Periode 2025–2026</span>
+            <span class="divisi-meta-badge">👥 3 Anggota</span>
+            <span class="divisi-meta-badge">🌐 Relasi & Kemitraan</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divisi-content-grid">
+        <div>
+          <p class="tugas-section-title fade-up">Tugas & Tanggung Jawab</p>
+          <div class="tugas-list fade-up">
+            <div class="tugas-item"><span class="tugas-dot" style="color:#fbbf24;">●</span>Menjalin dan memelihara hubungan kemitraan dengan pihak eksternal</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#fbbf24;">●</span>Mengurus perizinan dan koordinasi kegiatan dengan pihak kampus</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#fbbf24;">●</span>Menjadi penghubung resmi antara HMSI dan stakeholder</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#fbbf24;">●</span>Mencari dan mengelola sponsor untuk kegiatan HMSI</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#fbbf24;">●</span>Membangun jaringan dengan alumni dan komunitas teknologi</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#fbbf24;">●</span>Mengelola protokoler dan ceremonial kegiatan resmi organisasi</div>
+          </div>
+
+          <div class="member-section-title fade-up">Anggota Divisi</div>
+          <div class="team-cards-wrap fade-up"
+     id="anggota-humas">
+</div>
+        </div>
+
+        <div class="divisi-org-chart fade-up">
+          <div class="divisi-org-title">Struktur Divisi Humas</div>
+          <div class="org-chart-scroll-wrap"><div class="org-node">
+            <div class="org-node-box is-head" style="border-color:#fbbf24;">
+              <div class="on-role" style="color:#fbbf24;">Kepala Divisi</div>
+              <div class="on-name">Pramana Putra</div>
+              <div class="on-nim">NIM: 2022110088</div>
+            </div>
+            <div class="org-arrow" style="background:#fbbf24;opacity:0.5;"></div>
+            <div class="org-members-list">
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Alziary Mahendra</div><div class="on-nim">2022110096</div></div></div>
+              <div class="org-arrow"></div>
+              <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Farrel</div><div class="on-nim">2023110042</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- DIVISI SEKBEND                -->
+  <!-- ============================= -->
+  <div class="divisi-block" id="sekbend">
+    <div class="container">
+
+      <div class="divisi-header-row fade-up">
+        <div class="divisi-icon-big" style="background: linear-gradient(135deg,rgba(249,115,22,0.2),rgba(249,115,22,0.04)); border: 1.5px solid rgba(249,115,22,0.35);">💼</div>
+        <div class="divisi-title-group">
+          <h2>Sekbend</h2>
+          <div class="full-name" style="color:#f97316;">Sekretaris &amp; Bendahara</div>
+          <p>Divisi yang mengelola keuangan dan administrasi keuangan organisasi secara transparan, akuntabel, dan bertanggung jawab demi kelancaran seluruh kegiatan HMSI.</p>
+          <div class="divisi-meta-badges">
+            <span class="divisi-meta-badge">📅 Periode 2025–2026</span>
+            <span class="divisi-meta-badge">👥 4 Anggota</span>
+            <span class="divisi-meta-badge">💰 Keuangan & Adm</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divisi-content-grid">
+        <div>
+          <p class="tugas-section-title fade-up">Tugas & Tanggung Jawab</p>
+          <div class="tugas-list fade-up">
+            <div class="tugas-item"><span class="tugas-dot" style="color:#f97316;">●</span>Mengelola anggaran dan kas keuangan organisasi HMSI</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#f97316;">●</span>Membuat laporan keuangan berkala yang transparan dan akurat</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#f97316;">●</span>Mengatur pemasukan dan pengeluaran dana setiap kegiatan</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#f97316;">●</span>Menyusun Rancangan Anggaran Belanja (RAB) setiap program kerja</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#f97316;">●</span>Mengarsipkan seluruh bukti transaksi keuangan organisasi</div>
+            <div class="tugas-item"><span class="tugas-dot" style="color:#f97316;">●</span>Menyusun laporan pertanggungjawaban keuangan akhir periode</div>
+          </div>
+
+          <div class="member-section-title fade-up">Anggota Divisi</div>
+          <div class="team-cards-wrap fade-up"
+     id="anggota-sekbend">
+</div>
+        </div>
+
+        <!-- ORG CHART — Sekbend punya 2 sub-divisi -->
+        <div class="divisi-org-chart fade-up">
+          <div class="divisi-org-title">Struktur Divisi Sekbend</div>
+
+          <!-- Bendahara -->
+          <div style="margin-bottom:1.2rem;">
+            <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#f97316;text-align:center;margin-bottom:0.6rem;">Sub-Divisi Bendahara</div>
+            <div class="org-chart-scroll-wrap"><div class="org-node">
+              <div class="org-node-box is-head" style="border-color:#f97316;">
+                <div class="on-role" style="color:#f97316;">Kepala Bendahara</div>
+                <div class="on-name">Chantika</div>
+                <div class="on-nim">NIM: 2022110103</div>
+              </div>
+              <div class="org-arrow" style="background:#f97316;opacity:0.5;"></div>
+              <div class="org-members-list">
+                <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Novita</div><div class="on-nim">2022110111</div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sekretaris -->
+          <div style="padding-top:1.2rem;border-top:1px solid var(--border);">
+            <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#f97316;text-align:center;margin-bottom:0.6rem;">Sub-Divisi Sekretaris</div>
+            <div class="org-chart-scroll-wrap"><div class="org-node">
+              <div class="org-node-box is-head" style="border-color:#f97316;">
+                <div class="on-role" style="color:#f97316;">Kepala Sekretaris</div>
+                <div class="on-name">Alya Meiriska</div>
+                <div class="on-nim">NIM: 2022110111</div>
+              </div>
+              <div class="org-arrow" style="background:#f97316;opacity:0.5;"></div>
+              <div class="org-members-list">
+                <div class="org-member-item"><div class="org-node-box is-member"><div class="on-role">Anggota</div><div class="on-name">Kayla</div><div class="on-nim">2022110111</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+         <div class="footer-brand">
+  <img src="img/hmsi.png" alt="Logo HMSI" class="footer-logo">
+
+  <span><strong>HMSI</strong> UNIPEM</span>
+
+  <p>
+    Himpunan Mahasiswa Sistem Informasi
+    Universitas Pembangunan Indonesia
+  </p>
+</div>
+        <div class="footer-links">
+          <h4>Navigasi</h4>
+          <a href="index.html">Beranda</a>
+          <a href="tentang.html">Tentang HMSI</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="event.html">Event Info</a>
+        </div>
+        <div class="footer-links">
+          <h4>Divisi</h4>
+          <a href="#lisdm">LisDM</a>
+          <a href="#kominfo">Kominfo</a>
+          <a href="#humas">Humas</a>
+          <a href="#sekbend">Sekbend</a>
+        </div>
+        <div class="footer-links">
+          <h4>Lainnya</h4>
+          <a href="proker.html">Program Kerja</a>
+          <a href="kabinet.html">Profil Kabinet</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 HMSI UNIPEM. All rights reserved.</p></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    const API = 'api/pengurus/index.php';
+
+async function loadPengurusDivisi() {
+
+  const res = await fetch(API);
+  const json = await res.json();
+
+  if (!json.success) return;
+
+  const data = json.data;
+
+  const mapping = {
+    "LisDM": "anggota-lisdm",
+    "Kominfo": "anggota-kominfo",
+    "Humas": "anggota-humas",
+    "Kesekretariatan": "anggota-kesekretariatan",
+    "Sekbend": "anggota-sekbend"
+  };
+
+  Object.entries(mapping).forEach(([jabatan, containerId]) => {
+
+    const anggota = data.filter(
+      p => p.jabatan_nama === jabatan
+    );
+
+    const container =
+      document.getElementById(containerId);
+
+    if (!container) return;
+
+    container.innerHTML = anggota.map(item => {
+
+      const isKadiv =
+        item.peran.toLowerCase().includes('kepala') ||
+        item.peran.toLowerCase().includes('ketua');
+
+      return `
+        <div class="team-card ${isKadiv ? 'is-kadiv' : ''}">
+          <div class="team-photo">
+            <img src="${item.foto_path}" alt="${item.nama}">
+          </div>
+
+          <div class="team-info">
+            <div class="team-name">
+              ${item.nama}
+            </div>
+
+            <div class="team-role">
+              ${item.peran}
+            </div>
+
+            <div class="team-nim">
+              NIM: ${item.nim || '-'}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+  });
+
+}
+
+document.addEventListener(
+  'DOMContentLoaded',
+  loadPengurusDivisi
+);
+    // NAV SCROLL TO
+    function goTo(id, btn) {
+      if (btn) {
+        document.querySelectorAll('.divisi-nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // OVERVIEW CARD click without btn
+    function goTo(id, btn) {
+      const buttons = document.querySelectorAll('.divisi-nav-btn');
+      const ids = ['lisdm','kominfo','kesekretariatan','humas','sekbend'];
+      if (btn) {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      } else {
+        const idx = ids.indexOf(id);
+        buttons.forEach((b,i) => b.classList.toggle('active', i === idx));
+      }
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // UPDATE ACTIVE NAV ON SCROLL
+    const sections = ['lisdm','kominfo','kesekretariatan','humas','sekbend'];
+    window.addEventListener('scroll', () => {
+      let current = sections[0];
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 160) current = id;
+      });
+      document.querySelectorAll('.divisi-nav-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', sections[i] === current);
+      });
+    });
+  </script>
+</body>
+</html

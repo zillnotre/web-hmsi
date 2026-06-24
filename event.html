@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Info - HMSI UNIPEM</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+
+/* ──────────────────────────────────────────
+   EVENT PAGE — PREMIUM REDESIGN
+   Konsep: Timeline editorial + card glassmorphism
+   Aksen: warna sesuai CSS variables yang ada
+────────────────────────────────────────── */
+
+/* === SKELETON LOADER === */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.09) 50%,
+    rgba(255,255,255,0.04) 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 8px;
+}
+
+/* === HERO STATS BAR === */
+.event-stats-bar {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 3rem;
+  background: var(--bg-card);
+}
+.stat-cell {
+  flex: 1;
+  padding: 1.4rem 1.8rem;
+  text-align: center;
+  border-right: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.stat-cell:last-child { border-right: none; }
+.stat-cell:hover { background: var(--bg-card-hover); }
+.stat-num {
+  font-family: var(--ff-head);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  display: block;
+}
+.stat-lbl {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  display: block;
+}
+
+/* === COUNTDOWN === */
+.countdown-banner {
+  background: linear-gradient(135deg,
+    rgba(91,140,255,0.12) 0%,
+    rgba(167,139,250,0.08) 50%,
+    rgba(91,140,255,0.06) 100%);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  padding: 2.2rem 2.5rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.countdown-left { flex: 1; min-width: 200px; }
+.countdown-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.countdown-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+.countdown-title {
+  font-family: var(--ff-head);
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+.countdown-subtitle {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  margin-top: 0.3rem;
+}
+.countdown-boxes {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+.countdown-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  text-align: center;
+  min-width: 68px;
+  transition: border-color 0.2s;
+}
+.countdown-box:hover { border-color: var(--border-accent); }
+.countdown-box .num {
+  font-family: var(--ff-head);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+.countdown-box .lbl {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 0.25rem;
+}
+.countdown-sep {
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 1rem;
+  user-select: none;
+}
+
+/* === TAB BAR === */
+.event-tab-bar {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  width: fit-content;
+}
+.event-tab {
+  padding: 0.55rem 1.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: var(--ff-body);
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 7px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.event-tab.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(91,140,255,0.35);
+}
+.event-tab:not(.active):hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-primary);
+}
+.event-tab .tab-count {
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  min-width: 20px;
+  text-align: center;
+}
+.event-tab:not(.active) .tab-count {
+  background: rgba(255,255,255,0.08);
+}
+
+.event-panel { display: none; }
+.event-panel.active { display: block; }
+
+/* === UPCOMING EVENT CARD === */
+.event-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+  margin-bottom: 1.2rem;
+  position: relative;
+}
+.event-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.event-card:hover::before { opacity: 1; }
+.event-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(91,140,255,0.13);
+}
+
+.event-thumb {
+  background: linear-gradient(145deg,
+    rgba(91,140,255,0.18) 0%,
+    rgba(167,139,250,0.14) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.event-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 100%,
+    rgba(91,140,255,0.2) 0%, transparent 65%);
+}
+.event-thumb .ev-emoji {
+  font-size: 3rem;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+}
+.event-thumb .date-badge {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.date-badge .date-day {
+  font-family: var(--ff-head);
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+  display: block;
+}
+.date-badge .date-mon {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  display: block;
+}
+
+.event-body {
+  padding: 1.8rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.event-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+.event-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: rgba(91,140,255,0.12);
+  border: 1px solid rgba(91,140,255,0.25);
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.event-status-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.status-upcoming {
+  color: #4ade80;
+  background: rgba(74,222,128,0.1);
+  border: 1px solid rgba(74,222,128,0.25);
+}
+.status-past {
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+}
+
+.event-body h3 {
+  font-family: var(--ff-head);
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+  line-height: 1.3;
+}
+.event-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.event-meta-row {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+.event-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.event-meta-item .icon { font-size: 0.9rem; opacity: 0.8; }
+.event-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+
+/* === PAST EVENTS GRID === */
+.past-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.past-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.past-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.past-card:hover { border-color: var(--border-accent); background: var(--bg-card-hover); }
+.past-card:hover::after { transform: scaleX(1); }
+
+.past-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+.past-card .emoji { font-size: 1.8rem; }
+.past-card .past-year {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.past-card h4 {
+  font-family: var(--ff-head);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.35;
+}
+.past-card p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.past-card .past-meta {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.past-card .past-meta .check {
+  margin-left: auto;
+  color: #4ade80;
+  font-weight: 700;
+}
+
+/* === EMPTY STATE === */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+}
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+.empty-state h4 {
+  font-family: var(--ff-head);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: var(--text-primary);
+}
+.empty-state p { font-size: 0.875rem; }
+
+/* === LOADING SKELETON === */
+.skeleton-card {
+  height: 160px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.2rem;
+}
+.skeleton-past {
+  height: 160px;
+  border-radius: var(--radius);
+}
+
+/* === ERROR STATE === */
+.error-banner {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.5rem;
+  color: #f87171;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+  .past-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .event-card { grid-template-columns: 1fr; }
+  .event-thumb {
+    padding: 1.2rem 1.5rem;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 1.2rem;
+  }
+  .event-thumb .ev-emoji { font-size: 2rem; }
+  .date-badge .date-day { font-size: 2rem; }
+  .event-stats-bar { flex-wrap: wrap; }
+  .stat-cell { flex: none; width: 50%; }
+  .stat-cell:nth-child(2) { border-right: none; }
+  .stat-cell:nth-child(3) { border-top: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .stat-cell:nth-child(4) { border-top: 1px solid var(--border); }
+  .countdown-banner { flex-direction: column; align-items: flex-start; }
+  .countdown-boxes { width: 100%; }
+  .countdown-box { flex: 1; min-width: unset; }
+  .event-body { padding: 1.4rem; }
+}
+@media (max-width: 480px) {
+  .past-grid { grid-template-columns: 1fr; }
+  .event-tab-bar { width: 100%; }
+  .event-tab { flex: 1; justify-content: center; font-size: 0.8rem; padding: 0.5rem 0.8rem; }
+}
+</style>
+</head>
+<body>
+
+  <!-- NAVBAR (sama persis seperti aslinya) -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <div class="brand-icon">
+        <img src="img/hmsi.png" alt="Logo HMSI">
+      </div>
+      <span class="brand-text">
+        <strong>HMSI</strong><br>UNIPEM
+      </span>
+      <div class="brand-icon">
+      <img src="img/karsa.png" alt="Logo kabinet">
+    </div>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link active">Beranda</a>
+      <a href="tentang.html" class="nav-link">Tentang HMSI</a>
+      <a href="gallery.html" class="nav-link">Gallery</a>
+      <a href="event.html" class="nav-link">Event Info</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link dropdown-toggle">Divisi Kami <span>▾</span></a>
+        <div class="dropdown-menu">
+          <a href="divisi.html#lisdm">LisDM</a>
+          <a href="divisi.html#kominfo">Kominfo</a>
+          <a href="divisi.html#kesekretariatan">Kesekretariatan</a>
+          <a href="divisi.html#humas">Humas</a>
+          <a href="divisi.html#sekbend">Sekbend</a>
+        </div>
+      </div>
+      <a href="proker.html" class="nav-link">Program Kerja</a>
+      <a href="kabinet.html" class="nav-link">Profil Kabinet</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-content">
+      <div class="breadcrumb"><a href="index.html">Beranda</a> <span>/</span> Event Info</div>
+      <div class="section-tag">Kalender Kegiatan</div>
+      <h1>Event <span class="accent">Info</span></h1>
+      <p>Seluruh kegiatan dan event HMSI UNIPEM — dari yang akan datang hingga yang sudah berlangsung.</p>
+    </div>
+  </div>
+
+  <section class="section" style="background: var(--bg-dark);">
+    <div class="container">
+
+      <!-- STATS BAR (diisi JS) -->
+      <div class="event-stats-bar fade-up" id="statsBar">
+        <div class="stat-cell"><span class="stat-num skeleton" id="statTotal" style="height:2rem;width:40px;display:inline-block"></span><span class="stat-lbl">Total Event</span></div>
+        <div class="stat-cell"><span class="stat-num skeleton" id="statUpcoming" style="height:2rem;width:30px;display:inline-block"></span><span class="stat-lbl">Akan Datang</span></div>
+        <div class="stat-cell"><span class="stat-num skeleton" id="statPast" style="height:2rem;width:30px;display:inline-block"></span><span class="stat-lbl">Sudah Berlangsung</span></div>
+        <div class="stat-cell"><span class="stat-num" id="statYear">2026</span><span class="stat-lbl">Periode Aktif</span></div>
+      </div>
+
+      <!-- COUNTDOWN (diisi JS, hidden kalau tidak ada upcoming) -->
+      <div class="countdown-banner fade-up" id="countdownBanner" style="display:none">
+        <div class="countdown-left">
+          <div class="countdown-eyebrow">Event Terdekat</div>
+          <div class="countdown-title" id="countdownTitle">—</div>
+          <div class="countdown-subtitle" id="countdownSub"></div>
+        </div>
+        <div class="countdown-boxes">
+          <div class="countdown-box"><span class="num" id="days">00</span><span class="lbl">Hari</span></div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-box"><span class="num" id="hours">00</span><span class="lbl">Jam</span></div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-box"><span class="num" id="mins">00</span><span class="lbl">Menit</span></div>
+          <span class="countdown-sep">:</span>
+          <div class="countdown-box"><span class="num" id="secs">00</span><span class="lbl">Detik</span></div>
+        </div>
+      </div>
+
+      <!-- ERROR BANNER -->
+      <div class="error-banner fade-up" id="errorBanner" style="display:none">
+        ⚠️ <span id="errorMsg">Gagal memuat data event.</span>
+      </div>
+
+      <!-- TABS -->
+      <div class="event-tab-bar fade-up">
+        <button class="event-tab active" id="tabBtnUpcoming" onclick="switchTab('upcoming', this)">
+          📅 Upcoming <span class="tab-count" id="countUpcoming">—</span>
+        </button>
+        <button class="event-tab" id="tabBtnPast" onclick="switchTab('past', this)">
+          📁 Kegiatan Lalu <span class="tab-count" id="countPast">—</span>
+        </button>
+      </div>
+
+      <!-- PANEL: UPCOMING -->
+      <div class="event-panel active fade-up" id="tab-upcoming">
+        <!-- skeleton awal -->
+        <div class="skeleton skeleton-card" id="skeletonUpcoming"></div>
+      </div>
+
+      <!-- PANEL: PAST -->
+      <div class="event-panel fade-up" id="tab-past">
+        <div class="past-grid" id="pastGrid">
+          <!-- skeleton awal -->
+          <div class="skeleton skeleton-past"></div>
+          <div class="skeleton skeleton-past"></div>
+          <div class="skeleton skeleton-past"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+  <img src="img/hmsi.png" alt="Logo HMSI" class="footer-logo">
+
+  <span><strong>HMSI</strong> UNIPEM</span>
+
+  <p>
+    Himpunan Mahasiswa Sistem Informasi
+    Universitas Pembangunan Indonesia
+  </p>
+</div>
+        <div class="footer-links">
+          <h4>Navigasi</h4>
+          <a href="index.html">Beranda</a>
+          <a href="tentang.html">Tentang HMSI</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="event.html">Event Info</a>
+        </div>
+        <div class="footer-links">
+          <h4>Divisi</h4>
+          <a href="divisi.html#lisdm">LisDM</a>
+          <a href="divisi.html#kominfo">Kominfo</a>
+          <a href="divisi.html#humas">Humas</a>
+          <a href="divisi.html#sekbend">Sekbend</a>
+        </div>
+        <div class="footer-links">
+          <h4>Lainnya</h4>
+          <a href="proker.html">Program Kerja</a>
+          <a href="kabinet.html">Profil Kabinet</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 HMSI UNIPEM. All rights reserved.</p></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+  // ============================================================
+  //  event.html — Dynamic Event Page
+  //  Mengambil data dari: api/event/index.php
+  // ============================================================
+
+  const API = 'api/event/';
+
+  // ------------ helpers -----------
+  const MONTHS_ID = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+  const MONTHS_FULL = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+  function parseDate(str) {
+    // str = "YYYY-MM-DD"
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  function formatDateBadge(str) {
+    const d = parseDate(str);
+    return { day: String(d.getDate()).padStart(2,'0'), mon: MONTHS_ID[d.getMonth()] + ' ' + d.getFullYear() };
+  }
+
+  function formatDateFull(str) {
+    const d = parseDate(str);
+    return `${d.getDate()} ${MONTHS_FULL[d.getMonth()]} ${d.getFullYear()}`;
+  }
+
+  // ------------ tab switch -----------
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.event-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.event-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+
+  // ------------ render upcoming card -----------
+  function renderUpcomingCard(ev) {
+    const { day, mon } = formatDateBadge(ev.tanggal);
+    const hasLink = ev.link_daftar && ev.link_daftar.trim() !== '';
+    const isUpcoming = ev.status === 'upcoming';
+    return `
+      <article class="event-card">
+        <div class="event-thumb">
+          <div class="ev-emoji">${ev.emoji || '📅'}</div>
+          <div class="date-badge">
+            <span class="date-day">${day}</span>
+            <span class="date-mon">${mon}</span>
+          </div>
+        </div>
+        <div class="event-body">
+          <div class="event-header-row">
+            ${ev.kategori ? `<span class="event-tag">${ev.kategori}</span>` : '<span></span>'}
+            <span class="event-status-badge ${isUpcoming ? 'status-upcoming' : 'status-past'}">
+              ${isUpcoming ? '🟢 Akan Datang' : '✔ Selesai'}
+            </span>
+          </div>
+          <h3>${ev.judul}</h3>
+          ${ev.deskripsi ? `<p class="event-desc">${ev.deskripsi}</p>` : ''}
+          <div class="event-meta-row">
+            <div class="event-meta-item"><span class="icon">📅</span> ${formatDateFull(ev.tanggal)}</div>
+            ${ev.waktu    ? `<div class="event-meta-item"><span class="icon">⏰</span> ${ev.waktu}</div>` : ''}
+            ${ev.lokasi   ? `<div class="event-meta-item"><span class="icon">📍</span> ${ev.lokasi}</div>` : ''}
+            ${ev.kuota    ? `<div class="event-meta-item"><span class="icon">👥</span> ${ev.kuota}</div>` : ''}
+          </div>
+          <div class="event-actions">
+  ${hasLink
+    ? `<a href="${ev.link_daftar}" target="_blank" rel="noopener" class="btn-primary">
+         Daftar Sekarang
+       </a>`
+    : ''
+  }
+
+  <a href="contact.html?event=${encodeURIComponent(ev.judul)}"
+     class="btn-secondary">
+     Hubungi Kami
+  </a>
+</div>
+        </div>
+      </article>
+    `;
+  }
+
+  // ------------ render past card -----------
+  function renderPastCard(ev) {
+    const dateFull = formatDateFull(ev.tanggal);
+    return `
+      <div class="past-card">
+        <div class="past-card-header">
+          <span class="emoji">${ev.emoji || '📁'}</span>
+          <span class="past-year">${ev.tanggal.slice(0,4)}</span>
+        </div>
+        <h4>${ev.judul}</h4>
+        ${ev.deskripsi ? `<p>${ev.deskripsi}</p>` : ''}
+        <div class="past-meta">
+          <span>📅 ${dateFull}</span>
+          ${ev.lokasi ? `<span>📍 ${ev.lokasi}</span>` : ''}
+          <span class="check">✅ Selesai</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // ------------ countdown -----------
+  let _countdownTarget = null;
+  let _countdownInterval = null;
+
+  function startCountdown(dateStr, judul, lokasi) {
+    const target = parseDate(dateStr);
+    target.setHours(23, 59, 59); // akhir hari
+
+    const banner  = document.getElementById('countdownBanner');
+    const titleEl = document.getElementById('countdownTitle');
+    const subEl   = document.getElementById('countdownSub');
+
+    titleEl.textContent = judul;
+    subEl.textContent   = lokasi ? '📍 ' + lokasi : '';
+    banner.style.display = 'flex';
+
+    function tick() {
+      const diff = target - new Date();
+      if (diff <= 0) {
+        clearInterval(_countdownInterval);
+        banner.style.display = 'none';
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('days').textContent  = String(d).padStart(2,'0');
+      document.getElementById('hours').textContent = String(h).padStart(2,'0');
+      document.getElementById('mins').textContent  = String(m).padStart(2,'0');
+      document.getElementById('secs').textContent  = String(s).padStart(2,'0');
+    }
+    tick();
+    _countdownInterval = setInterval(tick, 1000);
+  }
+
+  // ------------ main fetch -----------
+  async function loadEvents() {
+    try {
+      const res  = await fetch(API + '?active=0');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const json = await res.json();
+
+      if (!json.success) throw new Error(json.message || 'Gagal memuat data.');
+
+      const all      = json.data || [];
+      const upcoming = all.filter(e => e.status === 'upcoming' && e.is_active == 1);
+      const past     = all.filter(e => e.status === 'past'     && e.is_active == 1);
+
+      // Stats bar
+      const statsHelper = (el, val) => {
+        el.classList.remove('skeleton');
+        el.style = '';
+        el.textContent = val;
+      };
+      statsHelper(document.getElementById('statTotal'),    all.length);
+      statsHelper(document.getElementById('statUpcoming'), upcoming.length);
+      statsHelper(document.getElementById('statPast'),     past.length);
+
+      // Tab counts
+      document.getElementById('countUpcoming').textContent = upcoming.length;
+      document.getElementById('countPast').textContent     = past.length;
+
+      // Render upcoming
+      const panelUp = document.getElementById('tab-upcoming');
+      panelUp.innerHTML = upcoming.length
+        ? upcoming.map(renderUpcomingCard).join('')
+        : `<div class="empty-state">
+             <div class="empty-icon">📭</div>
+             <h4>Belum Ada Event Mendatang</h4>
+             <p>Pantau terus halaman ini untuk informasi kegiatan terbaru dari HMSI UNIPEM.</p>
+           </div>`;
+
+      // Render past
+      const pastGrid = document.getElementById('pastGrid');
+      pastGrid.innerHTML = past.length
+        ? past.map(renderPastCard).join('')
+        : `<div class="empty-state" style="grid-column:1/-1">
+             <div class="empty-icon">📂</div>
+             <h4>Belum Ada Rekam Kegiatan</h4>
+             <p>Riwayat kegiatan HMSI UNIPEM akan ditampilkan di sini.</p>
+           </div>`;
+
+      // Countdown untuk upcoming terdekat
+      if (upcoming.length > 0) {
+        // urutkan berdasarkan tanggal terdekat
+        const sorted = [...upcoming].sort((a,b) => new Date(a.tanggal) - new Date(b.tanggal));
+        const nearest = sorted[0];
+        startCountdown(nearest.tanggal, nearest.judul, nearest.lokasi);
+      }
+
+    } catch (err) {
+      // Tampilkan error banner tapi tetap hide skeleton
+      document.getElementById('tab-upcoming').innerHTML =
+        `<div class="empty-state"><div class="empty-icon">⚠️</div><h4>Koneksi Gagal</h4><p>Tidak dapat terhubung ke server. Pastikan API berjalan di <code>${API}</code></p></div>`;
+      document.getElementById('pastGrid').innerHTML = '';
+
+      const statEls = ['statTotal','statUpcoming','statPast'];
+      statEls.forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.remove('skeleton');
+        el.style = '';
+        el.textContent = '—';
+      });
+
+      const errBanner = document.getElementById('errorBanner');
+      errBanner.style.display = 'flex';
+      document.getElementById('errorMsg').textContent = 'Gagal memuat data event: ' + err.message;
+
+      console.error('[event.html] API error:', err);
+    }
+  }
+
+  // Jalankan saat DOM siap
+  document.addEventListener('DOMContentLoaded', loadEvents);
+  </script>
+
+</body>
+</html>
